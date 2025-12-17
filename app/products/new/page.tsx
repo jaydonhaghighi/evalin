@@ -47,7 +47,7 @@ export default function NewProductPage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg" />
-            <span className="font-semibold text-xl">Cohorent</span>
+            <span className="font-semibold text-xl">Evalin</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/portfolio" className="text-sm text-slate-900 font-medium">
@@ -74,7 +74,7 @@ export default function NewProductPage() {
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Create New Product</h1>
-          <p className="text-slate-600">Enter product information and metrics to generate a Cohorent Product Rating.</p>
+          <p className="text-slate-600">Enter product information and metrics to generate a Evalin Product Rating.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

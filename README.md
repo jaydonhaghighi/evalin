@@ -2,7 +2,6 @@
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/contactcanmeto-3401s-projects/v0-nova-scale-product-scoring)
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/giVKXJUWONE)
 
 ## Overview
@@ -12,9 +11,10 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 ## Deployment
 
-Your project is live at:
+Build and run locally:
 
-**[https://vercel.com/contactcanmeto-3401s-projects/v0-nova-scale-product-scoring](https://vercel.com/contactcanmeto-3401s-projects/v0-nova-scale-product-scoring)**
+- `pnpm dev` (development)
+- `pnpm build` + `pnpm start` (production)
 
 ## Build your app
 
@@ -27,4 +27,3 @@ Continue building your app on:
 1. Create and modify your project using [v0.app](https://v0.app)
 2. Deploy your chats from the v0 interface
 3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository

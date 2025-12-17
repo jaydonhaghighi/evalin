@@ -12,7 +12,7 @@ export default function APIPage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg" />
-            <span className="font-semibold text-xl">Cohorent</span>
+            <span className="font-semibold text-xl">Evalin</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/portfolio" className="text-sm text-slate-600 hover:text-slate-900">
@@ -40,7 +40,7 @@ export default function APIPage() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Code2 className="h-8 w-8 text-blue-600" />
-            <h1 className="text-3xl font-bold text-slate-900">Cohorent API</h1>
+            <h1 className="text-3xl font-bold text-slate-900">Evalin API</h1>
           </div>
           <p className="text-lg text-slate-600">
             Programmatic access to product ratings, pillar scores, and portfolio data.
@@ -109,7 +109,7 @@ export default function APIPage() {
               <div>
                 <div className="text-sm font-medium text-slate-700 mb-2">Example Request</div>
                 <code className="block bg-slate-900 text-slate-300 p-3 rounded text-sm overflow-x-auto">
-                  curl https://cohorent.dev/api/products?phase=2&limit=10
+                  curl https://Evalin.dev/api/products?phase=2&limit=10
                 </code>
               </div>
             </CardContent>
@@ -208,7 +208,7 @@ export default function APIPage() {
         <Card className="mt-8">
           <CardHeader>
             <CardTitle>Rating System Reference</CardTitle>
-            <CardDescription>Understanding the Cohorent Product Rating (CPR)</CardDescription>
+            <CardDescription>Understanding the Evalin Product Rating (CPR)</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-6">

@@ -151,7 +151,7 @@ export default function ProductDetailPage({ params }: PageProps) {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg" />
-            <span className="font-semibold text-xl">Cohorent</span>
+            <span className="font-semibold text-xl">Evalin</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/portfolio" className="text-sm text-slate-900 font-medium">
@@ -199,7 +199,7 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Rating Summary */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200 min-w-[280px]">
-              <div className="text-sm text-slate-600 mb-1">Cohorent Product Rating</div>
+              <div className="text-sm text-slate-600 mb-1">Evalin Product Rating</div>
               <div className={`text-6xl font-bold mb-2 ${getCPRColor(rating.cpr)}`}>{rating.cpr}</div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-slate-600">Confidence Index</span>

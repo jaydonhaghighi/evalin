@@ -60,8 +60,8 @@ export interface RatingSnapshot {
   id: string
   productId: string
   // Overall rating
-  cpr: number // Cohorent Product Rating: 300-900
-  cci: number // Cohorent Confidence Index: 0.00-1.00
+  cpr: number // Evalin Product Rating: 300-900
+  cci: number // Evalin Confidence Index: 0.00-1.00
   phase: ProductPhase
   algoVersion: string
   timestamp: Date
