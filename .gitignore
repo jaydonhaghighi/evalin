@@ -1,4 +1,55 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Build outputs
+/dist/
+/dist-ssr/
+
+# Vite cache
+.vite/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage / test artifacts
+coverage/
+.nyc_output/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# ESLint cache
+.eslintcache
+
+# Environment files
 .env
-venv
-.next
+.env.*
+!.env.example
+
+# IDE / editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional: Bun (ignore if you primarily use npm)
+bun.lockb
+

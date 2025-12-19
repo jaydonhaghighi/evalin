@@ -1,27 +1,28 @@
 # Evalin
 
-Product scoring and portfolio insights built with Next.js 16, React 19, and pnpm.
+Product intelligence and scoring engine. Analyze demand, competition, economics, and live performance to make data-driven product decisions.
 
-## Requirements
-- Node 22+ with pnpm `10.26.0` (see `packageManager`)
-- Python 3.10+ for Firebase Functions
+## Development
 
-## Firebase Functions (Python)
-```bash
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+Prerequisites: Node.js (recommended via [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+
+```sh
+npm install
+npm run dev
 ```
 
-## Web app (Next.js)
-```bash
-# install deps
-pnpm install
+## Tech stack
 
-# dev server
-pnpm dev  # http://localhost:3000
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-# production
-pnpm build && pnpm start
+## Build / deploy
+
+```sh
+npm run build
 ```
 
+Deploy the generated static assets (typically the `dist/` output from Vite) to your hosting provider of choice.

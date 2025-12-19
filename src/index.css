@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 97%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 222 47% 20%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 222 47% 20%;
+
+    --radius: 0.625rem;
+
+    /* Rating tier colors */
+    --rating-scale: 160 84% 39%;
+    --rating-scale-bg: 160 84% 95%;
+    --rating-defend: 45 93% 47%;
+    --rating-defend-bg: 45 93% 95%;
+    --rating-test: 25 95% 53%;
+    --rating-test-bg: 25 95% 95%;
+    --rating-retire: 0 84% 60%;
+    --rating-retire-bg: 0 84% 95%;
+
+    /* Score gauge gradient */
+    --gauge-low: 0 84% 60%;
+    --gauge-mid: 45 93% 47%;
+    --gauge-high: 160 84% 39%;
+
+    /* Pillar colors */
+    --pillar-dv: 217 91% 60%;
+    --pillar-ro: 280 68% 60%;
+    --pillar-ue: 160 84% 39%;
+    --pillar-lp: 25 95% 53%;
+
+    /* Confidence indicator */
+    --confidence-high: 160 84% 39%;
+    --confidence-medium: 45 93% 47%;
+    --confidence-low: 0 84% 60%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 212 27% 84%;
+
+    --rating-scale-bg: 160 84% 15%;
+    --rating-defend-bg: 45 93% 15%;
+    --rating-test-bg: 25 95% 15%;
+    --rating-retire-bg: 0 84% 15%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .score-gauge-gradient {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--gauge-low)) 0%,
+      hsl(var(--gauge-mid)) 50%,
+      hsl(var(--gauge-high)) 100%
+    );
+  }
+
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm;
+  }
+
+  .rating-badge-scale {
+    @apply bg-[hsl(var(--rating-scale-bg))] text-[hsl(var(--rating-scale))] border-[hsl(var(--rating-scale))]/20;
+  }
+
+  .rating-badge-defend {
+    @apply bg-[hsl(var(--rating-defend-bg))] text-[hsl(var(--rating-defend))] border-[hsl(var(--rating-defend))]/20;
+  }
+
+  .rating-badge-test {
+    @apply bg-[hsl(var(--rating-test-bg))] text-[hsl(var(--rating-test))] border-[hsl(var(--rating-test))]/20;
+  }
+
+  .rating-badge-retire {
+    @apply bg-[hsl(var(--rating-retire-bg))] text-[hsl(var(--rating-retire))] border-[hsl(var(--rating-retire))]/20;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-score-fill {
+    animation: score-fill 1s ease-out forwards;
+  }
+
+  @keyframes score-fill {
+    from {
+      width: 0%;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
