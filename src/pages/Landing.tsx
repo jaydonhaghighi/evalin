@@ -22,6 +22,8 @@ import {
   CheckCircle2,
   X
 } from 'lucide-react';
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export default function Landing() {
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
@@ -81,43 +83,30 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg" />
-            <span className="font-semibold text-xl">Evalin</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link to="/portfolio" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
-              Portfolio
-            </Link>
-            <Link to="/docs" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
-              Docs
-            </Link>
-            <Link to="/api" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
-              API
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero */}
-      <section className="container mx-auto px-4 py-20 md:py-32">
+      <section className="container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-16">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6 text-balance">
             The standard for intelligent product validation.
           </h1>
-          <p className="text-sm md:text-xl text-slate-500 mb-10 text-pretty max-w-4xl mx-auto">
+          <p className="text-sm md:text-xl text-[#666666] mb-10 text-pretty max-w-4xl mx-auto">
             Evalin is the logic layer for your stack. It unifies demand, competition, unit economics and live performance into a standardized 300–900 rating. Backed by a live Confidence Index, teams can finally decide with precision: enter, scale, fix, or retire.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="text-sm">
+            <Button asChild size="lg" className="text-sm bg-[#171717] hover:bg-[#171717]/90 text-white">
               <Link to="/portfolio">
-                Get my product score <ArrowRight className="ml-2 h-4 w-4" />
+                Explore Portfolio <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="text-sm bg-transparent">
-              <Link to="/sample-report">See a live demo</Link>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-sm bg-transparent cursor-pointer border-[#171717] text-[#171717] hover:bg-[#171717]/5"
+              onClick={() => setIsWaitlistOpen(true)}
+            >
+              Join Waitlist
             </Button>
           </div>
         </div>
@@ -129,7 +118,8 @@ export default function Landing() {
           <div 
             className="relative rounded-xl aspect-video overflow-hidden bg-slate-100"
             style={{
-              boxShadow: '0 20px 60px -15px rgba(59, 130, 246, 0.3), 0 10px 40px -10px rgba(139, 92, 246, 0.2)',
+              boxShadow:
+                "0 24px 70px -20px rgba(0, 0, 0, 0.35), 0 12px 30px -12px rgba(0, 0, 0, 0.25)",
             }}
           >
             {/* Content area with gradient fade at edges */}
@@ -140,8 +130,17 @@ export default function Landing() {
                 WebkitMaskImage: 'radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)',
               }}
             >
-              {/* Placeholder for future image */}
-              <div className="w-full h-full" />
+              <img
+                src="/landing/product-image.png"
+                alt="Evalin product preview"
+                className="w-full h-full object-cover"
+                loading="lazy"
+                style={{
+                  // Fade out at the bottom over a larger region
+                  maskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
+                }}
+              />
             </div>
           </div>
         </div>
@@ -150,7 +149,7 @@ export default function Landing() {
       {/* Integration Logos */}
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-1xl md:text-xl font-semibold text-slate-900 mb-8 text-center">
+          <h2 className="text-1xl md:text-xl font-sans font-normal text-[#666666] mb-8 text-center">
             Works with your existing stack:
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-10 md:gap-14">
@@ -158,28 +157,28 @@ export default function Landing() {
               <img 
                 src="/landing/shopify-logo.svg"
                 alt="Shopify" 
-                className="h-10 md:h-11 w-auto opacity-70 hover:opacity-100 grayscale transition-all"
+                className="h-10 md:h-11 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
               />
             </div>
             <div className="flex items-center justify-center h-16">
               <img 
                 src="/landing/stripe-logo.svg"
                 alt="Stripe" 
-                className="h-10 md:h-11 w-auto opacity-70 hover:opacity-100 grayscale transition-all"
+                className="h-10 md:h-11 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
               />
             </div>
             <div className="flex items-center justify-center h-16">
               <img 
                 src="/landing/amazon-logo.svg" 
                 alt="Amazon" 
-                className="h-10 md:h-11 w-auto opacity-70 hover:opacity-100 grayscale transition-all"
+                className="h-10 md:h-11 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
               />
             </div>
             <div className="flex items-center justify-center h-16">
               <img 
                 src="/landing/google-analytics-logo.svg" 
                 alt="Google Analytics" 
-                className="h-8 md:h-9 w-auto opacity-70 hover:opacity-100 grayscale transition-all"
+                className="h-8 md:h-9 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
               />
             </div>
           </div>
@@ -276,34 +275,6 @@ export default function Landing() {
         </div>
       </section> */}
 
-      {/* Final CTA */}
-      <section className="container mx-auto px-4 py-20 border-t">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-            Turn product decisions into a reusable rating.
-          </h2>
-          <p className="text-lg text-slate-600 mb-8">
-            Evalin gives you a statistically grounded, versioned rating system for products and features—so your
-            organization can talk about portfolio health and potential in the same language, from data engineering to
-            the boardroom.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg">
-              <Link to="/portfolio">
-                Explore Portfolio <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-base bg-transparent cursor-pointer"
-              onClick={() => setIsWaitlistOpen(true)}
-            >
-              Join Waitlist
-            </Button>
-          </div>
-        </div>
-      </section>
 
       {/* Waitlist Modal */}
       {isWaitlistOpen && (
@@ -370,22 +341,7 @@ export default function Landing() {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="py-8 border-t">
-        <div className="container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">E</span>
-              </div>
-              <span className="font-semibold">Evalin</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Evalin. Product intelligence for modern commerce.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

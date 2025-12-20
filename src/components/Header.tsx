@@ -4,29 +4,31 @@ import { LayoutGrid, Plus, Settings } from 'lucide-react';
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-6">
+    <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">E</span>
-            </div>
-            <span className="font-semibold text-lg">Evalin</span>
+            <img
+              src="/landing/evalin-logo.png"
+              alt="Evalin"
+              className="h-32 w-32 rounded-lg object-contain"
+            />
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
-            <Link to="/">
-              <Button variant="ghost" size="sm" className="gap-2">
-                <LayoutGrid className="h-4 w-4" />
-                Portfolio
-              </Button>
+        </div>
+        <div className="flex items-center gap-2">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <nav className="hidden md:flex items-center gap-6">
+            <Link to="/portfolio" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
+              Portfolio
+            </Link>
+            <Link to="/docs" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
+              Docs
+            </Link>
+            <Link to="/api" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
+              API
             </Link>
           </nav>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Plus className="h-4 w-4" />
-            Add Product
-          </Button>
           <Button variant="ghost" size="icon">
             <Settings className="h-4 w-4" />
           </Button>
