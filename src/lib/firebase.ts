@@ -22,4 +22,9 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const analytics = getAnalytics(app);
 
+// Keep a named export for callers that prefer a getter-style API.
+export function getFirebaseApp() {
+  return app;
+}
+
 export default app; 
