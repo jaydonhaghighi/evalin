@@ -23,4 +23,13 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  {
+    // shadcn/ui generated files often export both components and helper constants.
+    // This rule is only relevant to Fast Refresh ergonomics, so disable it here to
+    // avoid noisy warnings in CI.
+    files: ["src/components/ui/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
 );

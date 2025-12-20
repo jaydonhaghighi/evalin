@@ -72,7 +72,7 @@ function zToNovaScale(z: number): number {
 function calculateDV(signals: ExternalSignals): { zScore: number | null; coverage: number } {
   const metrics: (number | null)[] = [];
   let available = 0;
-  let total = 3;
+  const total = 3;
 
   // Search trend slope (positive = good)
   const trendZ = standardize(signals.searchTrendSlope, BENCHMARKS.searchTrendSlope);
@@ -98,7 +98,7 @@ function calculateDV(signals: ExternalSignals): { zScore: number | null; coverag
 function calculateRO(signals: ExternalSignals): { zScore: number | null; coverage: number } {
   const metrics: (number | null)[] = [];
   let available = 0;
-  let total = 3;
+  const total = 3;
 
   // Competitor review depth (higher = more competition = bad, so invert)
   const reviewLog = logTransform(signals.competitorReviewDepth);
@@ -123,7 +123,7 @@ function calculateRO(signals: ExternalSignals): { zScore: number | null; coverag
 function calculateUE(economics: Economics): { zScore: number | null; coverage: number } {
   const metrics: (number | null)[] = [];
   let available = 0;
-  let total = 2;
+  const total = 2;
 
   // Gross margin (higher = good)
   const marginZ = standardize(economics.grossMarginPercent, BENCHMARKS.grossMarginPercent);
@@ -143,7 +143,7 @@ function calculateUE(economics: Economics): { zScore: number | null; coverage: n
 function calculateLP(performance: PerformanceSnapshot): { zScore: number | null; coverage: number; sampleStrength: number } {
   const metrics: (number | null)[] = [];
   let available = 0;
-  let total = 4;
+  const total = 4;
 
   // Sales velocity (log transform, higher = good)
   const salesLog = logTransform(performance.recentUnitsSold);
