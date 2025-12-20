@@ -53,3 +53,8 @@ Thumbs.db
 # Optional: Bun (ignore if you primarily use npm)
 bun.lockb
 
+# Firebase / GCP keys (NEVER commit)
+*-firebase-adminsdk-*.json
+*service-account*.json
+evalin-1d270-*.json
+
