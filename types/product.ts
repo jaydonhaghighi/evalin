@@ -11,7 +11,7 @@ export type {
   ExternalSignals,
   Economics,
   PerformanceSnapshot,
-} from "@/types/product";
+} from "../src/types/product";
 
-export { PHASE_LABELS, getRatingLabel } from "@/types/product";
+export { PHASE_LABELS, getRatingLabel } from "../src/types/product";
 
