@@ -7,8 +7,6 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
-import Docs from "./pages/Docs.tsx";
-import Api from "./pages/Api.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,8 +19,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/portfolio" element={<Dashboard />} />
-          <Route path="/docs" element={<Docs />} />
-          <Route path="/api" element={<Api />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
