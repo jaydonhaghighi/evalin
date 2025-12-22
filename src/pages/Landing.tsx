@@ -47,9 +47,22 @@ export default function Landing() {
       return;
     }
 
-    const endpoint = import.meta.env.VITE_WAITLIST_FUNCTION_URL as string | undefined;
+    const configuredEndpoint = (import.meta.env.VITE_WAITLIST_FUNCTION_URL as string | undefined)?.trim();
+    const projectId = (import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined)?.trim();
+    const region = (import.meta.env.VITE_FIREBASE_FUNCTIONS_REGION as string | undefined)?.trim() || "us-central1";
+    const useEmulators = String(import.meta.env.VITE_USE_FIREBASE_EMULATORS) === "true";
+
+    const derivedEndpoint = projectId
+      ? useEmulators
+        ? `http://localhost:5001/${projectId}/${region}/add_to_waitlist`
+        : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist`
+      : undefined;
+
+    const endpoint = configuredEndpoint || derivedEndpoint;
     if (!endpoint) {
-      setError("Waitlist endpoint is not configured (missing VITE_WAITLIST_FUNCTION_URL).");
+      setError(
+        "Waitlist endpoint is not configured. Set VITE_WAITLIST_FUNCTION_URL in your .env and restart the dev server."
+      );
       return;
     }
 
@@ -82,7 +95,6 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      
       {/* Header */}
       <Header />
 
@@ -255,7 +267,6 @@ export default function Landing() {
           </div>
         </div>
       </section>
-
 
       {/* Waitlist Modal */}
       {isWaitlistOpen && (
