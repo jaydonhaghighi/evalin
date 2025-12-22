@@ -82,12 +82,18 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      
       {/* Header */}
       <Header />
 
       {/* Hero */}
-      <section className="container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-16">
+      <section className="container mx-auto px-4 pt-20 pb-16 md:pt-24 md:pb-16">
         <div className="max-w-4xl mx-auto text-center">
+          <div className="flex justify-center mb-12">
+            <span className="inline-flex items-center rounded-full bg-[#F3F4F8] px-6 py-2 text-sm font-sans font-medium text-[#505050]">
+              Now accepting early access
+            </span>
+          </div>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6 text-balance">
             The standard for intelligent product validation.
           </h1>
@@ -97,7 +103,7 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-sm bg-[#171717] hover:bg-[#171717]/90 text-white">
               <Link to="/portfolio">
-                Explore Portfolio <ArrowRight className="ml-2 h-4 w-4" />
+                Get my product score <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button
@@ -106,42 +112,8 @@ export default function Landing() {
               className="text-sm bg-transparent cursor-pointer border-[#171717] text-[#171717] hover:bg-[#171717]/5"
               onClick={() => setIsWaitlistOpen(true)}
             >
-              Join Waitlist
+              See a live demo
             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Image Container with Gradient Mask */}
-      <section className="container mx-auto px-4 py-12">
-        <div className="relative max-w-6xl mx-auto">
-          <div 
-            className="relative rounded-xl aspect-video overflow-hidden bg-slate-100"
-            style={{
-              boxShadow:
-                "0 24px 70px -20px rgba(0, 0, 0, 0.35), 0 12px 30px -12px rgba(0, 0, 0, 0.25)",
-            }}
-          >
-            {/* Content area with gradient fade at edges */}
-            <div 
-              className="absolute inset-0 rounded-xl overflow-hidden"
-              style={{
-                maskImage: 'radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)',
-                WebkitMaskImage: 'radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)',
-              }}
-            >
-              <img
-                src="/landing/product-image.png"
-                alt="Evalin product preview"
-                className="w-full h-full object-cover"
-                loading="lazy"
-                style={{
-                  // Fade out at the bottom over a larger region
-                  maskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
-                  WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
-                }}
-              />
-            </div>
           </div>
         </div>
       </section>
@@ -185,95 +157,104 @@ export default function Landing() {
         </div>
       </section>
 
-      
-
-      {/* What Evalin Is
-      <section className="container mx-auto px-4 py-20 border-t">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 text-center">
+      {/* Pillars */}
+      <section className="container mx-auto px-4 pt-6 pb-16">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#171717]">
             A rating layer for your product portfolio.
           </h2>
-          <div className="prose prose-slate max-w-none">
-            <p className="text-lg text-slate-600 leading-relaxed">
-              Evalin is a product intelligence and scoring platform. It connects to your commerce stack, overlays
-              external market data, and produces a standardized{" "}
-              <span className="font-semibold text-slate-900">Evalin Product Rating (CPR)</span> between 300 and 900
-              for every product and feature.
-            </p>
+          <p className="mt-3 text-sm md:text-base text-[#666666]">
+            Four core pillars that Evalin uses to score every product.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+            <div className="rounded-2xl border border-slate-200/70 bg-[#F3F4F8]/60 p-8">
+              <TrendingUp className="h-6 w-6 text-slate-400" />
+              <h3 className="mt-6 text-base font-medium text-[#171717]">Demand Velocity</h3>
+              <p className="mt-2 text-sm text-slate-500">
+                External demand and intent from search trends and social signals.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200/70 bg-[#F3F4F8]/60 p-8">
+              <Target className="h-6 w-6 text-slate-400" />
+              <h3 className="mt-6 text-base font-medium text-[#171717]">Red Ocean Pressure</h3>
+              <p className="mt-2 text-sm text-slate-500">
+                Competition and advertising intensity in your category.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200/70 bg-[#F3F4F8]/60 p-8">
+              <DollarSign className="h-6 w-6 text-slate-400" />
+              <h3 className="mt-6 text-base font-medium text-[#171717]">Unit Economics</h3>
+              <p className="mt-2 text-sm text-slate-500">
+                Automated calculation of margins, landed cost, and return risk.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200/70 bg-[#F3F4F8]/60 p-8">
+              <BarChart3 className="h-6 w-6 text-slate-400" />
+              <h3 className="mt-6 text-base font-medium text-[#171717]">Live Performance</h3>
+              <p className="mt-2 text-sm text-slate-500">
+                Sales, conversion, repeat purchase, and discount behavior across your products.
+              </p>
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 gap-6 mt-10">
-            {[
-              { title: "Demand Velocity", description: "External demand and intent signals" },
-              { title: "Red Ocean Pressure", description: "Competitive and advertising intensity" },
-              { title: "Unit Economics", description: "Margins, landed cost, and return risk" },
-              { title: "Live Performance", description: "Sales, conversion, retention, and discount dependency" },
-            ].map((pillar) => (
-              <div key={pillar.title} className="border rounded-lg p-6 bg-white shadow-sm">
-                <h3 className="font-semibold text-slate-900 mb-2">{pillar.title}</h3>
-                <p className="text-sm text-slate-600">{pillar.description}</p>
-              </div>
-            ))}
-          </div>
-          <p className="text-slate-600 mt-8 text-center">
-            Every CPR is accompanied by a{" "}
-            <span className="font-semibold text-slate-900">confidence index (0.00–1.00)</span> and a phase tag (idea,
-            early live, mature), so stakeholders always know both how strong the signal is and how much to trust it.
+
+          <p className="mt-10 text-xs md:text-sm text-slate-500 max-w-3xl mx-auto">
+            Every Evalin product rating is backed by a{" "}
+            <span className="font-medium text-slate-700">Confidence Index (0.00–1.00)</span> and a phase tag (idea,
+            early live, mature), so teams see not just the score, but how strong the signal is and how much to trust it.
           </p>
         </div>
-      </section> */}
+      </section>
 
-      {/* Example Snapshot
-      <section className="container mx-auto px-4 py-20 border-t">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-10 text-center">
-            Example: mature product inside Evalin
+      {/* Example section header */}
+      <section className="container mx-auto px-4 pt-4 pb-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#171717]">
+            Example: Mature product inside Evalin
           </h2>
-          <div className="border-2 border-blue-200 rounded-xl p-8 bg-gradient-to-br from-blue-50 to-white">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900">Portable Espresso Maker</h3>
-                <div className="flex items-center gap-3 mt-2">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                    Scale
-                  </span>
-                  <span className="text-sm text-slate-500">Phase 2 – Mature</span>
-                </div>
-              </div>
-              <div className="mt-4 md:mt-0 text-right">
-                <div className="text-sm text-slate-500 mb-1">Evalin Product Rating</div>
-                <div className="text-5xl font-bold text-slate-900">784</div>
-                <div className="text-sm text-slate-500 mt-1">Confidence: 0.86</div>
-              </div>
+          <p className="mt-4 text-sm md:text-base text-[#666666] max-w-3xl mx-auto">
+            A mature SKU scored by Evalin: one 300–900 rating, pillar breakdowns, and a confidence index that together
+            explain why this product is tagged to scale rather than fix or retire.
+          </p>
+        </div>
+      </section>
+
+      {/* Image Container with Gradient Mask */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="relative max-w-6xl mx-auto">
+          <div 
+            className="relative rounded-xl aspect-video overflow-hidden bg-slate-100"
+            style={{
+              boxShadow:
+                "0 24px 70px -20px rgba(0, 0, 0, 0.35), 0 12px 30px -12px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            {/* Content area with gradient fade at edges */}
+            <div 
+              className="absolute inset-0 rounded-xl overflow-hidden"
+              style={{
+                maskImage: 'radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)',
+              }}
+            >
+              <img
+                src="/landing/product-image.png"
+                alt="Evalin product preview"
+                className="w-full h-full object-cover"
+                loading="lazy"
+                style={{
+                  // Fade out at the bottom over a larger region
+                  maskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
+                }}
+              />
             </div>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                { name: "Demand Velocity", score: 812, description: "Strong, sustained external interest" },
-                { name: "Red Ocean Pressure", score: 735, description: "Active competition, but not prohibitive" },
-                { name: "Unit Economics", score: 790, description: "Solid margins after landed costs and returns" },
-                { name: "Live Performance", score: 760, description: "Healthy sales velocity and conversion" },
-              ].map((pillar) => (
-                <div key={pillar.name} className="bg-white rounded-lg p-4 border">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-slate-700">{pillar.name}</span>
-                    <span className="text-lg font-bold text-slate-900">{pillar.score}</span>
-                  </div>
-                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden mb-2">
-                    <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-700"
-                      style={{ width: `${((pillar.score - 300) / 600) * 100}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-slate-500">{pillar.description}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-sm text-slate-600 mt-6 italic">
-              Interpretation: This SKU supports additional acquisition spend and channel expansion. Monitor CPC
-              inflation, but economics and demand are currently robust.
-            </p>
           </div>
         </div>
-      </section> */}
+      </section>
 
 
       {/* Waitlist Modal */}
