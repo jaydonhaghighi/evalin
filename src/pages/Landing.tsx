@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { 
   TrendingUp, 
   Target, 
@@ -25,9 +27,70 @@ import { Footer } from "@/components/Footer";
 
 export default function Landing() {
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const closeModal = () => {
+    if (isSubmitting) return;
     setIsWaitlistOpen(false);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+
+    const trimmed = email.trim().toLowerCase();
+    if (!trimmed || !trimmed.includes("@")) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    const configuredEndpoint = (import.meta.env.VITE_WAITLIST_FUNCTION_URL as string | undefined)?.trim();
+    const projectId = (import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined)?.trim();
+    const region = (import.meta.env.VITE_FIREBASE_FUNCTIONS_REGION as string | undefined)?.trim() || "us-central1";
+    const useEmulators = String(import.meta.env.VITE_USE_FIREBASE_EMULATORS) === "true";
+
+    const derivedEndpoint = projectId
+      ? useEmulators
+        ? `http://localhost:5001/${projectId}/${region}/add_to_waitlist`
+        : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist`
+      : undefined;
+
+    const endpoint = configuredEndpoint || derivedEndpoint;
+    if (!endpoint) {
+      setError(
+        "Waitlist endpoint is not configured. Set VITE_WAITLIST_FUNCTION_URL in your .env and restart the dev server."
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+
+      const data = (await res.json().catch(() => ({}))) as {
+        message?: string;
+        error?: string;
+        duplicate?: boolean;
+      };
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to join waitlist.");
+      }
+
+      // Treat duplicates as success (user is effectively “on the list”)
+      setIsSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to join waitlist.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -218,21 +281,54 @@ export default function Landing() {
           >
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors"
+              disabled={isSubmitting}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors disabled:opacity-50"
             >
               <X className="h-5 w-5" />
             </button>
-            <div className="py-2">
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Live demo</h2>
-              <p className="text-slate-600">
-                Demo experience coming soon. Redesign this modal however you want — the email/waitlist capture has been removed.
-              </p>
-              <div className="mt-6 flex justify-end">
-                <Button variant="outline" onClick={closeModal}>
-                  Close
-                </Button>
+
+            {!isSubmitted ? (
+              <>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">Join the Waitlist</h2>
+                <p className="text-slate-600 mb-6">
+                  Be among the first to access Evalin when we launch.
+                </p>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email address</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={isSubmitting}
+                      className="w-full"
+                    />
+                    {error && <p className="text-sm text-red-600">{error}</p>}
+                  </div>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full"
+                    disabled={isSubmitting || !email.trim()}
+                  >
+                    {isSubmitting ? "Submitting..." : "Join Waitlist"}
+                  </Button>
+                </form>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">You're on the list!</h2>
+                <p className="text-slate-600">We'll be in touch very soon.</p>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
