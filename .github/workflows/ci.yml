@@ -50,16 +50,6 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
 
-      - name: Deploy preview (PR)
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVALIN }}
-          projectId: evalin-1d270
-          channelId: pr-${{ github.event.pull_request.number }}
-          expires: 7d
-
       - name: Deploy live (main)
         if: github.event_name == 'push'
         uses: FirebaseExtended/action-hosting-deploy@v0

@@ -8,7 +8,7 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
             <img
-              src="/landing/evalin-logo.png"
+              src="/landing/evalin_logo.png"
               alt="Evalin"
               className="h-48 w-auto object-contain"
             />
