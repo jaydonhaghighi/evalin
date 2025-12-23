@@ -5,7 +5,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <img
-              src="/landing/evalin-logo.png"
+              src="/landing/evalin_logo.png"
               alt="Evalin"
               className="h-28 sm:h-32 md:h-36 w-auto rounded object-contain"
               loading="lazy"
