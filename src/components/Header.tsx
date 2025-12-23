@@ -10,7 +10,7 @@ export function Header() {
             <img
               src="/landing/evalin-logo.png"
               alt="Evalin"
-              className="h-20 w-auto object-contain"
+              className="h-48 w-auto object-contain"
             />
         </Link>
 

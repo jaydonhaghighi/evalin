@@ -1,4 +1,7 @@
 {
+  "functions": {
+    "source": "functions/lib"
+  },
   "hosting": {
     "public": "dist",
     "ignore": [
