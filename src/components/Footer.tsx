@@ -8,7 +8,6 @@ export function Footer() {
               src="/landing/evalin_logo.png"
               alt="Evalin"
               className="h-28 sm:h-32 md:h-36 w-auto rounded object-contain"
-              loading="lazy"
             />
           </div>
           <p className="text-sm text-muted-foreground">
