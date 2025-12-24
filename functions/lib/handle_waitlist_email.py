@@ -7,6 +7,7 @@ from typing import Iterable, Optional
 
 import google.cloud.firestore
 from firebase_admin import firestore
+from google.api_core.exceptions import AlreadyExists
 
 
 def _env_bool(name: str, default: bool = False) -> bool:
@@ -31,7 +32,7 @@ def _build_msg(*, subject: str, from_addr: str, to_addrs: Iterable[str], body: s
     return msg
 
 
-def send_waitlist_emails(user_email: str) -> None:
+def send_waitlist_emails(user_email: str) -> dict:
     """
     Very simple SMTP sender.
 
@@ -49,7 +50,20 @@ def send_waitlist_emails(user_email: str) -> None:
 
     if not smtp_user or not smtp_password:
         print("Warning: SMTP_USER/SMTP_PASSWORD not set; skipping email.")
-        return
+        return {
+            "attempted": False,
+            "sent": False,
+            "reason": "missing_smtp_credentials",
+        }
+
+    print(
+        "SMTP config:"
+        f" host={smtp_host}"
+        f" port={smtp_port}"
+        f" use_ssl={use_ssl}"
+        f" notify_recipients={len(notify_to)}"
+        f" send_confirmation={send_confirmation}"
+    )
 
     ctx = ssl.create_default_context()
 
@@ -110,7 +124,12 @@ def send_waitlist_emails(user_email: str) -> None:
 
     if not messages:
         # Nothing to send (e.g., notify list empty and confirmation disabled)
-        return
+        print("SMTP: no emails to send (empty recipients and/or confirmation disabled).")
+        return {
+            "attempted": False,
+            "sent": False,
+            "reason": "no_recipients_or_confirmation_disabled",
+        }
 
     try:
         with _connect() as server:
@@ -120,9 +139,21 @@ def send_waitlist_emails(user_email: str) -> None:
             for msg in messages:
                 server.send_message(msg)
         print("SMTP email(s) sent.")
+        return {
+            "attempted": True,
+            "sent": True,
+            "internal_recipients": len(notify_to),
+            "confirmation_sent": bool(send_confirmation),
+        }
     except Exception as e:
         # Don't fail signup if SMTP fails.
         print(f"SMTP send failed: {e}")
+        return {
+            "attempted": True,
+            "sent": False,
+            "reason": "smtp_error",
+            "error": str(e),
+        }
 
 
 def process_waitlist_signup(db: google.cloud.firestore.Client, email: str) -> tuple[dict, int]:
@@ -134,25 +165,27 @@ def process_waitlist_signup(db: google.cloud.firestore.Client, email: str) -> tu
     if not email or "@" not in email:
         return {"error": "Valid email address is required"}, 400
 
-    # Check duplicate
-    snapshot = db.collection("waitlist") \
-        .where("email", "==", email) \
-        .limit(1) \
-        .get()
+    # Atomic de-dupe: use the email as the document id.
+    # (Firestore doc ids can't contain '/', which emails don't.)
+    doc_ref = db.collection("waitlist").document(email)
 
-    if list(snapshot):
+    try:
+        doc_ref.create(
+            {
+                "email": email,
+                "created_at": firestore.SERVER_TIMESTAMP,
+                "status": "pending",
+            }
+        )
+        print(f"Added {email} to waitlist (ID: {doc_ref.id})")
+    except AlreadyExists:
         return {"message": "Email already on waitlist", "duplicate": True}, 200
 
-    # Add to Firestore
-    _, doc_ref = db.collection("waitlist").add({
-        "email": email,
-        "created_at": firestore.SERVER_TIMESTAMP,
-        "status": "pending"
-    })
-
-    print(f"Added {email} to waitlist (ID: {doc_ref.id})")
-
     # Send notification (best-effort)
-    send_waitlist_emails(email)
+    smtp_status = send_waitlist_emails(email)
 
-    return {"message": "Successfully added to waitlist", "email": email}, 200
+    return {
+        "message": "Successfully added to waitlist",
+        "email": email,
+        "smtp": smtp_status,
+    }, 200

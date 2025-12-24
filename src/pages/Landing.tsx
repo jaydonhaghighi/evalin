@@ -11,15 +11,6 @@ import {
   DollarSign, 
   BarChart3, 
   ArrowRight,
-  Upload,
-  Calculator,
-  Layers,
-  Rocket,
-  Shield,
-  FlaskConical,
-  Archive,
-  Zap,
-  CheckCircle2,
   X
 } from 'lucide-react';
 import { Header } from "@/components/Header";
@@ -49,13 +40,18 @@ export default function Landing() {
 
     const configuredEndpoint = (import.meta.env.VITE_WAITLIST_FUNCTION_URL as string | undefined)?.trim();
     const projectId = (import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined)?.trim();
-    const region = (import.meta.env.VITE_FIREBASE_FUNCTIONS_REGION as string | undefined)?.trim() || "us-central1";
-    const useEmulators = String(import.meta.env.VITE_USE_FIREBASE_EMULATORS) === "true";
+    const region =
+      (import.meta.env.VITE_FIREBASE_FUNCTIONS_REGION as string | undefined)?.trim() || "us-central1";
+
+    // Only use emulators when running locally (prevents accidentally hitting localhost endpoints in prod).
+    const isLocalhost =
+      typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    const useEmulators = isLocalhost && String(import.meta.env.VITE_USE_FIREBASE_EMULATORS) === "true";
 
     const derivedEndpoint = projectId
       ? useEmulators
-        ? `http://localhost:5001/${projectId}/${region}/add_to_waitlist`
-        : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist`
+        ? `http://localhost:5001/${projectId}/${region}/add_to_waitlist_v2`
+        : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist_v2`
       : undefined;
 
     const endpoint = configuredEndpoint || derivedEndpoint;
@@ -133,7 +129,7 @@ export default function Landing() {
       {/* Integration Logos */}
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-1xl md:text-xl font-sans font-normal text-[#666666] mb-8 text-center">
+          <h2 className="font-sans font-normal text-[#666666] mb-8 text-center" style={{ fontSize: "16px" }}>
             Works with your existing stack:
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-10 md:gap-14">
@@ -141,28 +137,28 @@ export default function Landing() {
               <img 
                 src="/landing/shopify-logo.svg"
                 alt="Shopify" 
-                className="h-10 md:h-11 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
+                className="h-10 md:h-11 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
               />
             </div>
             <div className="flex items-center justify-center h-16">
               <img 
                 src="/landing/stripe-logo.svg"
                 alt="Stripe" 
-                className="h-10 md:h-11 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
+                className="h-10 md:h-11 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
               />
             </div>
             <div className="flex items-center justify-center h-16">
               <img 
                 src="/landing/amazon-logo.svg" 
                 alt="Amazon" 
-                className="h-10 md:h-11 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
+                className="h-10 md:h-11 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
               />
             </div>
             <div className="flex items-center justify-center h-16">
               <img 
                 src="/landing/google-analytics-logo.svg" 
                 alt="Google Analytics" 
-                className="h-8 md:h-9 w-auto opacity-95 hover:opacity-100 contrast-125 transition-all"
+                className="h-8 md:h-9 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
               />
             </div>
           </div>
@@ -256,7 +252,6 @@ export default function Landing() {
                 src="/landing/product-image.png"
                 alt="Evalin product preview"
                 className="w-full h-full object-cover"
-                loading="lazy"
                 style={{
                   // Fade out at the bottom over a larger region
                   maskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",

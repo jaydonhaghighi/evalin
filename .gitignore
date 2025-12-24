@@ -60,3 +60,5 @@ evalin-1d270-*.json
 
 src/utils/handle_waitlist_email.py
 src/utils/main.py
+/functions/__pycache__/
+/functions/lib/__pycache__/

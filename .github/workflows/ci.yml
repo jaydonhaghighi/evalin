@@ -50,6 +50,38 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
 
+      - name: Setup Python (for Functions deploy)
+        if: github.event_name == 'push'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Firebase CLI
+        if: github.event_name == 'push'
+        run: npm i -g firebase-tools
+
+      - name: Prepare Python venv (Functions)
+        if: github.event_name == 'push'
+        run: |
+          python -m venv functions/lib/venv
+          functions/lib/venv/bin/pip install -r functions/lib/requirements.txt
+
+      - name: Deploy Functions (main)
+        if: github.event_name == 'push'
+        env:
+          PROJECT_ID: evalin-1d270
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_NOTIFY_TO: ${{ secrets.SMTP_NOTIFY_TO }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVALIN }}
+        run: |
+          echo "$FIREBASE_SERVICE_ACCOUNT" > "$GOOGLE_APPLICATION_CREDENTIALS"
+          printf "%s" "$SMTP_USER" | firebase functions:secrets:set SMTP_USER --data-file - --force
+          printf "%s" "$SMTP_PASSWORD" | firebase functions:secrets:set SMTP_PASSWORD --data-file - --force
+          printf "%s" "$SMTP_NOTIFY_TO" | firebase functions:secrets:set SMTP_NOTIFY_TO --data-file - --force
+          firebase deploy --only functions --project "$PROJECT_ID"
+
       - name: Deploy live (main)
         if: github.event_name == 'push'
         uses: FirebaseExtended/action-hosting-deploy@v0
