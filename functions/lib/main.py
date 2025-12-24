@@ -36,6 +36,9 @@ def _get_db() -> firestore.Client:
             r"http://localhost:3000",         
             r"http://localhost:5173",
             r"http://localhost:8080",
+            # Firebase Hosting (prod + preview channels)
+            r"https://.*\.web\.app",
+            r"https://.*\.firebaseapp\.com",
         ],
         cors_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"],
         # Optional: allow credentials if you send cookies/auth headers
@@ -87,6 +90,9 @@ def add_to_waitlist(req: https_fn.Request) -> https_fn.Response:
             r"http://localhost:3000",
             r"http://localhost:5173",
             r"http://localhost:8080",
+            # Firebase Hosting (prod + preview channels)
+            r"https://.*\.web\.app",
+            r"https://.*\.firebaseapp\.com",
         ],
         cors_methods=["POST", "OPTIONS"],
     ),
