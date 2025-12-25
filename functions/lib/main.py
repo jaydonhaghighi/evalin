@@ -27,7 +27,7 @@ def _get_db() -> firestore.Client:
     memory=256,
     timeout_sec=60,
     invoker="public",
-    
+
     # CORS configuration
     cors=options.CorsOptions(
         cors_origins=[
@@ -35,7 +35,8 @@ def _get_db() -> firestore.Client:
             r"http://localhost:8080",
 
             # Firebase Hosting (prod)
-            r"https://.*\.evalin\.io",
+            r"https://evalin.io",
+            r"https://www.evalin.io",
         ],
         cors_methods=["POST", "OPTIONS"],
     )
