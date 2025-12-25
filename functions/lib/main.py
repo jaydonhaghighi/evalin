@@ -10,6 +10,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
 _db: firestore.Client | None = None
 
+
 def _get_db() -> firestore.Client:
     """
     Lazy init: Firebase CLI imports user code during deploy analysis.
@@ -26,14 +27,15 @@ def _get_db() -> firestore.Client:
     memory=256,
     timeout_sec=60,
     invoker="public",
+    
     # CORS configuration
     cors=options.CorsOptions(
         cors_origins=[
             r"http://localhost:5173",
             r"http://localhost:8080",
 
-            # Firebase Hosting (prod + preview channels)
-            r"https://www.evalin.io",
+            # Firebase Hosting (prod)
+            r"https://.*\.evalin\.io",
         ],
         cors_methods=["POST", "OPTIONS"],
     )
@@ -65,13 +67,12 @@ def add_to_waitlist(req: https_fn.Request) -> https_fn.Response:
             json.dumps(result),
             status=status_code,
             mimetype="application/json",
-            
         )
+
     except Exception as e:
         print(f"Error: {e}")
         return https_fn.Response(
             json.dumps({"error": "Internal server error"}),
             status=500,
             mimetype="application/json",
-            
         )
