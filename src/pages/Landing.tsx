@@ -50,8 +50,8 @@ export default function Landing() {
 
     const derivedEndpoint = projectId
       ? useEmulators
-        ? `http://localhost:5001/${projectId}/${region}/add_to_waitlist_v2`
-        : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist_v2`
+        ? `http://localhost:5001/${projectId}/${region}/add_to_waitlist`
+        : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist`
       : undefined;
 
     const endpoint = configuredEndpoint || derivedEndpoint;
