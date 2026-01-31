@@ -131,7 +131,7 @@ export default function Landing() {
       </section>
 
       {/* Integration Logos */}
-      <div className="w-full bg-slate-100/90">
+      <div className="w-full">
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-sans font-normal text-[#666666] mb-6 text-center text-sm">
@@ -172,7 +172,7 @@ export default function Landing() {
       </div>
 
       {/* Pillars */}
-      <section className="container mx-auto px-4 pt-16 pb-16">
+      <section className="container mx-auto px-4 pt-16 pb-16 bg-slate-100/90">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">
             A rating layer for your product portfolio.
@@ -224,7 +224,7 @@ export default function Landing() {
       </section>
 
       {/* Why product teams use Evalin */}
-      <div className="w-full bg-slate-100/90">
+      <div className="w-full">
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717] text-center mb-8">
@@ -248,8 +248,11 @@ export default function Landing() {
         </section>
       </div>
 
-      {/* Example section header */}
-      <section className="container mx-auto px-4 pt-16 pb-10">
+
+      {/* Image Container with Gradient Mask */}
+      <div className="w-full bg-slate-100/90">
+          {/* Example section header */}
+          <section className="container mx-auto px-4 pt-16 pb-10">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">
             Example: Mature product inside Evalin
@@ -260,9 +263,6 @@ export default function Landing() {
           </p>
         </div>
       </section>
-
-      {/* Image Container with Gradient Mask */}
-      <div className="w-full bg-slate-100/90">
       <section className="container mx-auto px-4 py-16">
         <div className="relative max-w-6xl mx-auto">
           <div 

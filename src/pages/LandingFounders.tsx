@@ -131,7 +131,7 @@ export default function LandingFounders() {
       </section>
 
       {/* Integration Logos */}
-      <div className="w-full bg-slate-100/90">
+      <div className="w-full">
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-sans font-normal text-[#666666] mb-6 text-center text-sm">
@@ -172,7 +172,7 @@ export default function LandingFounders() {
       </div>
 
       {/* Pillars */}
-      <section className="container mx-auto px-4 pt-16 pb-16">
+      <section className="container mx-auto px-4 pt-16 pb-16 bg-slate-100/90">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">
             One simple score, four data pillars.
@@ -222,23 +222,8 @@ export default function LandingFounders() {
         </div>
       </section>
 
-      {/* Example section header */}
-      <section className="container mx-auto px-4 pt-16 pb-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">
-            Example: Mature product inside Evalin
-          </h2>
-          <p className="mt-3 text-xs md:text-sm text-[#666666] max-w-3xl mx-auto">
-            Stop guessing with the first inventory order.
-          </p>
-          <p className="mt-2 text-xs md:text-sm text-[#666666] max-w-3xl mx-auto">
-            A healthy product shows strong scores across demand, competition, economics, and live performance. The confidence level indicates the result is stable.
-          </p>
-        </div>
-      </section>
-
       {/* Why new founders start with Evalin */}
-      <div className="w-full bg-slate-100/90">
+      <div className="w-full">
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717] text-center mb-8">
@@ -257,17 +242,26 @@ export default function LandingFounders() {
                 <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
                 <span>Compare multiple ideas side by side with one score instead of many tabs.</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-[#666666]">
-                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>Validate product ideas through Evalin to see which items are worth bringing to life.</span>
-              </li>
             </ul>
           </div>
         </section>
       </div>
 
+
       {/* Image Container with Gradient Mask */}
       <div className="w-full bg-slate-100/90">
+        {/* Example section header */}
+        <section className="container mx-auto px-4 pt-16 pb-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">
+            Example: Mature product inside Evalin
+          </h2>
+          <p className="mt-3 text-xs md:text-sm text-[#666666] max-w-3xl mx-auto">
+            A mature SKU scored by Evalin: one 300–900 rating, pillar breakdowns, and a confidence index that together
+            explain why this product is tagged to scale rather than fix or retire.
+          </p>
+        </div>
+        </section>
       <section className="container mx-auto px-4 py-16">
         <div className="relative max-w-6xl mx-auto">
           <div 
@@ -301,13 +295,16 @@ export default function LandingFounders() {
       </section>
       </div>
 
-      {/* Bottom CTA */}
-      <section className="container mx-auto px-4 pt-20 pb-24 md:pt-24 md:pb-28">
+        {/* Bottom CTA */}
+        <section className="container mx-auto px-4 pt-20 pb-24 md:pt-24 md:pb-28">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
-            Get my first product scored
+          <h2 className="text-4xl md:text-2xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
+          Stop guessing with the first inventory order.
           </h2>
-          <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white mt-6">
+          <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
+          Validate product ideas through Evalin to see which items are worth bringing to life.
+          </p>
+          <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
             <Link to="/portfolio">
               Get my first product scored <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
             </Link>
