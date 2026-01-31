@@ -104,15 +104,15 @@ export default function Landing() {
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
-          The validation score for your product.
+          A standardized scoring system for product roadmap prioritization.
           </h1>
           <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
-          Evalin converts demand, competition, economics, and sales data into a 300–900 rating. This single score provides the precision needed to enter, scale, fix, or retire a product.
+          Evalin combines demand, competitive, economic, and behavioral data into a 300–900 rating and confidence index for each product or initiative, giving PMs a shared signal for what to build, grow, or sunset.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
               <Link to="/portfolio">
-                Join waitlist <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                Request Access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Link>
             </Button>
             <Button
@@ -124,6 +124,9 @@ export default function Landing() {
               How it works
             </Button>
           </div>
+          <p className="text-xs md:text-base text-[#666666] mt-8 mb-10 text-pretty max-w-4xl mx-auto">
+          For teams that need a consistent way to compare different products in their catalog.
+          </p>
         </div>
       </section>
 
@@ -188,18 +191,18 @@ export default function Landing() {
             </div>
 
             <div className="rounded-xl border border-slate-200/70 bg-[#F3F4F8]/60 p-6">
-              <DollarSign className="h-5 w-5 text-slate-400" />
-              <h3 className="mt-4 text-sm font-medium text-[#171717]">Unit Economics</h3>
+              <Target className="h-5 w-5 text-slate-400" />
+              <h3 className="mt-4 text-sm font-medium text-[#171717]">Red Ocean Pressure</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                Automated calculation of margins, landed cost including tariffs, and return risk.
+                Competition and advertising intensity in your category.
               </p>
             </div>
 
             <div className="rounded-xl border border-slate-200/70 bg-[#F3F4F8]/60 p-6">
-              <Target className="h-5 w-5 text-slate-400" />
-              <h3 className="mt-4 text-sm font-medium text-[#171717]">Red Ocean Pressure</h3>
+              <DollarSign className="h-5 w-5 text-slate-400" />
+              <h3 className="mt-4 text-sm font-medium text-[#171717]">Unit Economics</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                Competition and advertising intensity within a specific product category.
+                Automated calculation of margins, landed cost, and return risk.
               </p>
             </div>
 
@@ -207,15 +210,15 @@ export default function Landing() {
               <BarChart3 className="h-5 w-5 text-slate-400" />
               <h3 className="mt-4 text-sm font-medium text-[#171717]">Live Performance</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                Real-world data from your store, including sales, conversion rates, repeat purchases, and discounting.
+                Sales, conversion, repeat purchase, and discount behavior across your products.
               </p>
             </div>
           </div>
 
           <p className="mt-8 text-xs text-slate-500 max-w-3xl mx-auto">
-            Every rating includes a{" "}
-            <span className="font-medium text-slate-700">Confidence Index</span> and a phase tag.
-            These metrics show the strength of the data signal and how much to trust the score at each stage of the product life cycle.
+            Every Evalin product rating is backed by a{" "}
+            <span className="font-medium text-slate-700">Confidence Index (0.00–1.00)</span> and a phase tag (idea,
+            early live, mature), so teams see not just the score, but how strong the signal is and how much to trust it.
           </p>
         </div>
       </section>
@@ -225,20 +228,20 @@ export default function Landing() {
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717] text-center mb-8">
-              Why teams use Evalin.
+              Why product teams use Evalin
             </h2>
             <ul className="space-y-4 text-left">
               <li className="flex items-start gap-3 text-sm text-[#666666]">
                 <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>One rating per product. Replace the clutter of spreadsheets with a single metric. Design and finance finally look at the same data.</span>
+                <span>Use one shared number to explain product health and potential to stakeholders.</span>
               </li>
               <li className="flex items-start gap-3 text-sm text-[#666666]">
                 <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>Real market visibility. Spot where demand rises, where competition is too high, and where margins remain stable.</span>
+                <span>Compare new ideas against live products using the same data-driven framework.</span>
               </li>
               <li className="flex items-start gap-3 text-sm text-[#666666]">
                 <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>Unified decisions. Use a shared number to decide when to enter, scale, fix, or retire a product.</span>
+                <span>Back up decisions to launch or cancel a product with objective, versioned logic.</span>
               </li>
             </ul>
           </div>
@@ -293,18 +296,18 @@ export default function Landing() {
       </section>
       </div>
 
-      {/* Bottom CTA */}
-      <section className="container mx-auto px-4 pt-20 pb-24 md:pt-24 md:pb-28">
+          {/* Bottom CTA */}
+          <section className="container mx-auto px-4 pt-20 pb-24 md:pt-24 md:pb-28">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-2xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
-          Ready to stop guessing?
+            Give me the next release a real green light
           </h2>
           <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
-          See which products deserve the next dollar of investment with a single rating for every product.
+            Run products through Evalin to see which products deserve runway.
           </p>
           <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
             <Link to="/portfolio">
-              Request access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              Request Access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
             </Link>
           </Button>
         </div>

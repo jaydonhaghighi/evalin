@@ -22,6 +22,9 @@ pids
 *.seed
 *.pid.lock
 
+#next
+.next
+
 # Coverage / test artifacts
 coverage/
 .nyc_output/

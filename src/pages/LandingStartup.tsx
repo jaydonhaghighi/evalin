@@ -104,15 +104,15 @@ export default function Landing() {
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
-          The validation score for your product.
+          Build products with evidence, not just runway.
           </h1>
           <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
-          Evalin converts demand, competition, economics, and sales data into a 300–900 rating. This single score provides the precision needed to enter, scale, fix, or retire a product.
+          Evalin provides a 300–900 rating and confidence index for every product idea. Identify what is worth building before investing time and capital.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
               <Link to="/portfolio">
-                Join waitlist <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                Join early-stage beta <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Link>
             </Button>
             <Button
@@ -124,6 +124,9 @@ export default function Landing() {
               How it works
             </Button>
           </div>
+          <p className="text-xs md:text-base text-[#666666] mt-8 mb-10 text-pretty max-w-4xl mx-auto">
+          For early-stage startups that cannot afford to ship the wrong product twice.         
+           </p>
         </div>
       </section>
 
@@ -207,15 +210,13 @@ export default function Landing() {
               <BarChart3 className="h-5 w-5 text-slate-400" />
               <h3 className="mt-4 text-sm font-medium text-[#171717]">Live Performance</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                Real-world data from your store, including sales, conversion rates, repeat purchases, and discounting.
+                Direct store data including sales, conversion, and repeat purchase behavior.
               </p>
             </div>
           </div>
 
           <p className="mt-8 text-xs text-slate-500 max-w-3xl mx-auto">
-            Every rating includes a{" "}
-            <span className="font-medium text-slate-700">Confidence Index</span> and a phase tag.
-            These metrics show the strength of the data signal and how much to trust the score at each stage of the product life cycle.
+            Every rating includes a Confidence Index and a phase tag. These metrics show the strength of the data signal and how much to trust the score at each stage of the product life cycle.
           </p>
         </div>
       </section>
@@ -225,20 +226,20 @@ export default function Landing() {
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717] text-center mb-8">
-              Why teams use Evalin.
+              Why early-stage teams use Evalin.
             </h2>
             <ul className="space-y-4 text-left">
               <li className="flex items-start gap-3 text-sm text-[#666666]">
                 <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>One rating per product. Replace the clutter of spreadsheets with a single metric. Design and finance finally look at the same data.</span>
+                <span>Filter ideas before committing design, engineering, or inventory resources.</span>
               </li>
               <li className="flex items-start gap-3 text-sm text-[#666666]">
                 <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>Real market visibility. Spot where demand rises, where competition is too high, and where margins remain stable.</span>
+                <span>Anchor discussions on objective numbers instead of internal opinions.</span>
               </li>
               <li className="flex items-start gap-3 text-sm text-[#666666]">
                 <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>Unified decisions. Use a shared number to decide when to enter, scale, fix, or retire a product.</span>
+                <span>Present investors with a clear, defensible logic for the product roadmap.</span>
               </li>
             </ul>
           </div>
@@ -252,8 +253,7 @@ export default function Landing() {
             Example: Mature product inside Evalin
           </h2>
           <p className="mt-3 text-xs md:text-sm text-[#666666] max-w-3xl mx-auto">
-            A mature SKU scored by Evalin: one 300–900 rating, pillar breakdowns, and a confidence index that together
-            explain why this product is tagged to scale rather than fix or retire.
+            A successful product shows a clear rating, pillar scores, and a high confidence level. These metrics indicate why a product is a strong candidate for further investment.
           </p>
         </div>
       </section>
@@ -297,14 +297,14 @@ export default function Landing() {
       <section className="container mx-auto px-4 pt-20 pb-24 md:pt-24 md:pb-28">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-2xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
-          Ready to stop guessing?
+            Give the next release a real green light.
           </h2>
           <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
-          See which products deserve the next dollar of investment with a single rating for every product.
+            Run ideas through Evalin to see which products deserve runway.
           </p>
           <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
             <Link to="/portfolio">
-              Request access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              Join early-stage beta <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
             </Link>
           </Button>
         </div>

@@ -17,7 +17,7 @@ import {
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-export default function Landing() {
+export default function LandingFounders() {
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -104,15 +104,18 @@ export default function Landing() {
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
-          The validation score for your product.
+            Validate your product idea before the first order.
           </h1>
+          <p className="text-xs md:text-base text-[#666666] mb-4 text-pretty max-w-4xl mx-auto">
+            Evalin pulls in demand, competition, and cost signals to generate a 300–900 rating and a confidence index. First-time founders can stop guessing with their initial inventory purchases.
+          </p>
           <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
-          Evalin converts demand, competition, economics, and sales data into a 300–900 rating. This single score provides the precision needed to enter, scale, fix, or retire a product.
+            For new founders picking a first product or category.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
               <Link to="/portfolio">
-                Join waitlist <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                Check my product idea <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Link>
             </Button>
             <Button
@@ -172,10 +175,10 @@ export default function Landing() {
       <section className="container mx-auto px-4 pt-16 pb-16">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">
-            A rating layer for your product portfolio.
+            One simple score, four data pillars.
           </h2>
-          <p className="mt-2 text-xs md:text-sm text-[#666666]">
-            Four core pillars that Evalin uses to score every product.
+          <p className="mt-4 text-xs text-slate-500 max-w-3xl mx-auto">
+            Evalin analyzes these pillars before providing a recommendation.
           </p>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
@@ -183,7 +186,7 @@ export default function Landing() {
               <TrendingUp className="h-5 w-5 text-slate-400" />
               <h3 className="mt-4 text-sm font-medium text-[#171717]">Demand Velocity</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                External demand and intent from search trends and social signals.
+                Search trends and social interest showing if current demand is real.
               </p>
             </div>
 
@@ -191,7 +194,7 @@ export default function Landing() {
               <DollarSign className="h-5 w-5 text-slate-400" />
               <h3 className="mt-4 text-sm font-medium text-[#171717]">Unit Economics</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                Automated calculation of margins, landed cost including tariffs, and return risk.
+                Profit remaining after product costs, shipping, tariffs, and potential returns.
               </p>
             </div>
 
@@ -199,7 +202,7 @@ export default function Landing() {
               <Target className="h-5 w-5 text-slate-400" />
               <h3 className="mt-4 text-sm font-medium text-[#171717]">Red Ocean Pressure</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                Competition and advertising intensity within a specific product category.
+                Market crowding and the intensity of competition.
               </p>
             </div>
 
@@ -207,43 +210,17 @@ export default function Landing() {
               <BarChart3 className="h-5 w-5 text-slate-400" />
               <h3 className="mt-4 text-sm font-medium text-[#171717]">Live Performance</h3>
               <p className="mt-1.5 text-xs text-slate-500">
-                Real-world data from your store, including sales, conversion rates, repeat purchases, and discounting.
+                Post-launch behavior including sales, conversion rates, repeat purchases, and discounting.
               </p>
             </div>
           </div>
 
           <p className="mt-8 text-xs text-slate-500 max-w-3xl mx-auto">
             Every rating includes a{" "}
-            <span className="font-medium text-slate-700">Confidence Index</span> and a phase tag.
-            These metrics show the strength of the data signal and how much to trust the score at each stage of the product life cycle.
+            <span className="font-medium text-slate-700">Confidence Index</span> and phase tag. This identifies the difference between a strong signal and an early hint.
           </p>
         </div>
       </section>
-
-      {/* Why product teams use Evalin */}
-      <div className="w-full bg-slate-100/90">
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717] text-center mb-8">
-              Why teams use Evalin.
-            </h2>
-            <ul className="space-y-4 text-left">
-              <li className="flex items-start gap-3 text-sm text-[#666666]">
-                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>One rating per product. Replace the clutter of spreadsheets with a single metric. Design and finance finally look at the same data.</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm text-[#666666]">
-                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>Real market visibility. Spot where demand rises, where competition is too high, and where margins remain stable.</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm text-[#666666]">
-                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
-                <span>Unified decisions. Use a shared number to decide when to enter, scale, fix, or retire a product.</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-      </div>
 
       {/* Example section header */}
       <section className="container mx-auto px-4 pt-16 pb-10">
@@ -252,11 +229,42 @@ export default function Landing() {
             Example: Mature product inside Evalin
           </h2>
           <p className="mt-3 text-xs md:text-sm text-[#666666] max-w-3xl mx-auto">
-            A mature SKU scored by Evalin: one 300–900 rating, pillar breakdowns, and a confidence index that together
-            explain why this product is tagged to scale rather than fix or retire.
+            Stop guessing with the first inventory order.
+          </p>
+          <p className="mt-2 text-xs md:text-sm text-[#666666] max-w-3xl mx-auto">
+            A healthy product shows strong scores across demand, competition, economics, and live performance. The confidence level indicates the result is stable.
           </p>
         </div>
       </section>
+
+      {/* Why new founders start with Evalin */}
+      <div className="w-full bg-slate-100/90">
+        <section className="container mx-auto px-4 py-16">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717] text-center mb-8">
+              Why new founders start with Evalin.
+            </h2>
+            <ul className="space-y-4 text-left">
+              <li className="flex items-start gap-3 text-sm text-[#666666]">
+                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
+                <span>Protect capital by avoiding products that lack a verified market signal.</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-[#666666]">
+                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
+                <span>Real market visibility. Spot where demand rises, where competition is too high, and where margins remain stable.</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-[#666666]">
+                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
+                <span>Compare multiple ideas side by side with one score instead of many tabs.</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-[#666666]">
+                <Check className="h-5 w-5 shrink-0 text-[#171717] mt-0.5" strokeWidth={2.5} />
+                <span>Validate product ideas through Evalin to see which items are worth bringing to life.</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
 
       {/* Image Container with Gradient Mask */}
       <div className="w-full bg-slate-100/90">
@@ -296,15 +304,12 @@ export default function Landing() {
       {/* Bottom CTA */}
       <section className="container mx-auto px-4 pt-20 pb-24 md:pt-24 md:pb-28">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-2xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
-          Ready to stop guessing?
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
+            Get my first product scored
           </h2>
-          <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
-          See which products deserve the next dollar of investment with a single rating for every product.
-          </p>
-          <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
+          <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white mt-6">
             <Link to="/portfolio">
-              Request access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              Get my first product scored <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
             </Link>
           </Button>
         </div>
