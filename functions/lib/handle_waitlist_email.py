@@ -3,7 +3,7 @@ import smtplib
 import ssl
 from datetime import datetime
 from email.message import EmailMessage
-from typing import Iterable, Optional
+from typing import Any, Iterable, Optional
 
 import google.cloud.firestore
 from firebase_admin import firestore
@@ -156,7 +156,9 @@ def send_waitlist_emails(user_email: str) -> dict:
         }
 
 
-def process_waitlist_signup(db: google.cloud.firestore.Client, email: str) -> tuple[dict, int]:
+def process_waitlist_signup(
+    db: google.cloud.firestore.Client, email: str, meta: Optional[dict[str, Any]] = None
+) -> tuple[dict, int]:
     """
     Core business logic. Returns (response_dict, status_code)
     """
@@ -175,6 +177,7 @@ def process_waitlist_signup(db: google.cloud.firestore.Client, email: str) -> tu
                 "email": email,
                 "created_at": firestore.SERVER_TIMESTAMP,
                 "status": "pending",
+                "meta": meta or {},
             }
         )
         print(f"Added {email} to waitlist (ID: {doc_ref.id})")

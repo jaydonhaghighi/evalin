@@ -61,6 +61,13 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copy, setCopy] = useState(DEFAULT_COPY);
+  const [openContext, setOpenContext] = useState<{
+    opened_from_path?: string;
+    opened_from_query?: string;
+    referrer?: string;
+    utm?: Record<string, string>;
+    click_ids?: Record<string, string>;
+  } | null>(null);
 
   const closeModal = () => {
     if (isSubmitting) return;
@@ -70,6 +77,31 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const openWaitlist = (options?: WaitlistOpenOptions) => {
     const merged = { ...DEFAULT_COPY, ...(options ?? {}) };
     setCopy(merged);
+
+    // Capture attribution context at open-time (closest to click).
+    const url = typeof window !== "undefined" ? new URL(window.location.href) : null;
+    const params = url ? url.searchParams : null;
+    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
+    const utm: Record<string, string> = {};
+    for (const k of utmKeys) {
+      const v = params?.get(k);
+      if (v) utm[k] = v;
+    }
+    const clickIdKeys = ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "ttclid", "li_fat_id"] as const;
+    const click_ids: Record<string, string> = {};
+    for (const k of clickIdKeys) {
+      const v = params?.get(k);
+      if (v) click_ids[k] = v;
+    }
+
+    setOpenContext({
+      opened_from_path: url?.pathname,
+      opened_from_query: url?.search || undefined,
+      referrer: typeof document !== "undefined" ? document.referrer || undefined : undefined,
+      utm: Object.keys(utm).length ? utm : undefined,
+      click_ids: Object.keys(click_ids).length ? click_ids : undefined,
+    });
+
     setError(null);
     setIsSubmitted(false);
     setIsSubmitting(false);
@@ -96,10 +128,19 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
 
     setIsSubmitting(true);
     try {
+      const meta = {
+        landing_path: openContext?.opened_from_path ?? (typeof window !== "undefined" ? window.location.pathname : undefined),
+        landing_query: openContext?.opened_from_query ?? (typeof window !== "undefined" ? window.location.search || undefined : undefined),
+        referrer: openContext?.referrer ?? (typeof document !== "undefined" ? document.referrer || undefined : undefined),
+        utm: openContext?.utm,
+        click_ids: openContext?.click_ids,
+        user_agent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
+      };
+
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed }),
+        body: JSON.stringify({ email: trimmed, meta }),
       });
 
       const data = (await res.json().catch(() => ({}))) as {
@@ -182,4 +223,3 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     </WaitlistContext.Provider>
   );
 }
-
