@@ -43,7 +43,7 @@ export default function ProductDetail() {
       
       <main className="container py-8">
         {/* Back Button */}
-        <Link to="/portfolio" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+        <Link to="/how-it-works" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="h-4 w-4" />
           Back to Portfolio
         </Link>

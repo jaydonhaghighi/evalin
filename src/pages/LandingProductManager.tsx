@@ -1,94 +1,21 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { 
   TrendingUp, 
   Target, 
   DollarSign, 
   BarChart3, 
   ArrowRight,
-  X,
-  Check
+  Check,
 } from 'lucide-react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { useWaitlist } from "@/components/WaitlistProvider";
 
 export default function Landing() {
-  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const closeModal = () => {
-    if (isSubmitting) return;
-    setIsWaitlistOpen(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-
-    const trimmed = email.trim().toLowerCase();
-    if (!trimmed || !trimmed.includes("@")) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    const configuredEndpoint = (import.meta.env.VITE_WAITLIST_FUNCTION_URL as string | undefined)?.trim();
-    const projectId = (import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined)?.trim();
-    const region =
-      (import.meta.env.VITE_FIREBASE_FUNCTIONS_REGION as string | undefined)?.trim() || "us-central1";
-
-    // Only use emulators when running locally (prevents accidentally hitting localhost endpoints in prod).
-    const isLocalhost =
-      typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname);
-    const useEmulators = isLocalhost && String(import.meta.env.VITE_USE_FIREBASE_EMULATORS) === "true";
-
-    const derivedEndpoint = projectId
-      ? useEmulators
-        ? `http://localhost:5001/${projectId}/${region}/add_to_waitlist`
-        : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist`
-      : undefined;
-
-    const endpoint = configuredEndpoint || derivedEndpoint;
-    if (!endpoint) {
-      setError(
-        "Waitlist endpoint is not configured. Set VITE_WAITLIST_FUNCTION_URL in your .env and restart the dev server."
-      );
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed }),
-      });
-
-      const data = (await res.json().catch(() => ({}))) as {
-        message?: string;
-        error?: string;
-        duplicate?: boolean;
-      };
-
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to join waitlist.");
-      }
-
-      // Treat duplicates as success (user is effectively “on the list”)
-      setIsSubmitted(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to join waitlist.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { openWaitlist } = useWaitlist();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -110,18 +37,21 @@ export default function Landing() {
           Evalin combines demand, competitive, economic, and behavioral data into a 300–900 rating and confidence index for each product or initiative, giving PMs a shared signal for what to build, grow, or sunset.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
-              <Link to="/portfolio">
-                Request Access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-              </Link>
+            <Button
+              type="button"
+              size="lg"
+              className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white"
+              onClick={() => openWaitlist({ title: "Request Access", submitLabel: "Request Access" })}
+            >
+              Request Access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
             </Button>
             <Button
+              asChild
               size="lg"
               variant="outline"
               className="text-xs bg-transparent cursor-pointer border-[#171717] text-[#171717] hover:bg-[#171717]/5"
-              onClick={() => setIsWaitlistOpen(true)}
             >
-              How it works
+              <Link to="/how-it-works">How it works</Link>
             </Button>
           </div>
           <p className="text-xs md:text-base text-[#666666] mt-8 mb-10 text-pretty max-w-4xl mx-auto">
@@ -305,78 +235,16 @@ export default function Landing() {
           <p className="text-xs md:text-base text-[#666666] mb-8 text-pretty max-w-4xl mx-auto">
             Run products through Evalin to see which products deserve runway.
           </p>
-          <Button asChild size="lg" className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white">
-            <Link to="/portfolio">
-              Request Access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-            </Link>
+          <Button
+            type="button"
+            size="lg"
+            className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white"
+            onClick={() => openWaitlist({ title: "Request Access", submitLabel: "Request Access" })}
+          >
+            Request Access <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
           </Button>
         </div>
       </section>
-
-      {/* Waitlist Modal */}
-      {isWaitlistOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          onClick={closeModal}
-        >
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-          <div
-            className="relative bg-white rounded-xl shadow-2xl max-w-md w-full p-8 border"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={closeModal}
-              disabled={isSubmitting}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors disabled:opacity-50"
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            {!isSubmitted ? (
-              <>
-                <h2 className="text-xl font-bold text-slate-900 mb-2">Join the Waitlist</h2>
-                <p className="text-sm text-slate-600 mb-6">
-                  Be among the first to access Evalin when we launch.
-                </p>
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email address</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="you@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      disabled={isSubmitting}
-                      className="w-full"
-                    />
-                    {error && <p className="text-sm text-red-600">{error}</p>}
-                  </div>
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="w-full"
-                    disabled={isSubmitting || !email.trim()}
-                  >
-                    {isSubmitting ? "Submitting..." : "Join Waitlist"}
-                  </Button>
-                </form>
-              </>
-            ) : (
-              <div className="text-center py-6">
-                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h2 className="text-xl font-bold text-slate-900 mb-2">You're on the list!</h2>
-                <p className="text-sm text-slate-600">We'll be in touch very soon.</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       <Footer />
     </div>
