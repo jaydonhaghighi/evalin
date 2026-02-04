@@ -9,6 +9,20 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "headers": [
+      {
+        "source": "/startup",
+        "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      },
+      {
+        "source": "/product-manager",
+        "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      },
+      {
+        "source": "/founders",
+        "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      }
+    ],
     "rewrites": [
       {
         "source": "**",

@@ -12,3 +12,8 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Persona pages are campaign-specific and should not be indexed.
+Disallow: /startup
+Disallow: /product-manager
+Disallow: /founders

@@ -62,7 +62,8 @@ def add_to_waitlist(req: https_fn.Request) -> https_fn.Response:
             )
 
         email = data["email"]
-        result, status_code = process_waitlist_signup(_get_db(), email)
+        meta = data.get("meta") if isinstance(data, dict) else None
+        result, status_code = process_waitlist_signup(_get_db(), email, meta)
 
         return https_fn.Response(
             json.dumps(result),

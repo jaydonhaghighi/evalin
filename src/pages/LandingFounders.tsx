@@ -1,6 +1,6 @@
 import { PersonaLanding } from "@/pages/personas/PersonaLanding";
 import { personaLandingConfigs } from "@/pages/personas/personaLandingConfig";
 
-export default function Landing() {
-  return <PersonaLanding config={personaLandingConfigs.general} />;
+export default function LandingFounders() {
+  return <PersonaLanding config={personaLandingConfigs.founders} />;
 }
