@@ -157,10 +157,6 @@ export default function HowItWorks() {
                             </div>
                           </div>
                         </div>
-
-                        <Button variant="outline" size="sm" className="mt-4 w-full gap-2">
-                          Recalculate Score <ArrowRight className="h-4 w-4" />
-                        </Button>
                       </CardContent>
                     </Card>
                   </div>

@@ -10,6 +10,16 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
 _db: firestore.Client | None = None
 
+_CORS = options.CorsOptions(
+    cors_origins=[
+        r"http://localhost:5173",
+        r"http://localhost:8080",
+        r"https://evalin.io",
+        r"https://www.evalin.io",
+    ],
+    cors_methods=["POST", "OPTIONS"],
+)
+
 
 def _get_db() -> firestore.Client:
     """
@@ -29,17 +39,7 @@ def _get_db() -> firestore.Client:
     invoker="public",
 
     # CORS configuration
-    cors=options.CorsOptions(
-        cors_origins=[
-            r"http://localhost:5173",
-            r"http://localhost:8080",
-
-            # Firebase Hosting (prod)
-            r"https://evalin.io",
-            r"https://www.evalin.io",
-        ],
-        cors_methods=["POST", "OPTIONS"],
-    )
+    cors=_CORS
 )
 def add_to_waitlist(req: https_fn.Request) -> https_fn.Response:
     if req.method == "OPTIONS":
@@ -71,6 +71,66 @@ def add_to_waitlist(req: https_fn.Request) -> https_fn.Response:
             mimetype="application/json",
         )
 
+    except Exception as e:
+        print(f"Error: {e}")
+        return https_fn.Response(
+            json.dumps({"error": "Internal server error"}),
+            status=500,
+            mimetype="application/json",
+        )
+
+
+@https_fn.on_request(
+    memory=256,
+    timeout_sec=60,
+    invoker="public",
+    cors=_CORS,
+)
+def submit_waitlist_survey(req: https_fn.Request) -> https_fn.Response:
+    if req.method == "OPTIONS":
+        return https_fn.Response("", status=204)
+
+    if req.method != "POST":
+        return https_fn.Response(
+            json.dumps({"error": "Method not allowed"}),
+            status=405,
+            mimetype="application/json",
+        )
+
+    try:
+        data = req.get_json(silent=True) or {}
+        email = (data.get("email") or "").strip().lower()
+        survey = data.get("survey")
+
+        if not email or "@" not in email:
+            return https_fn.Response(
+                json.dumps({"error": "Valid 'email' is required"}),
+                status=400,
+                mimetype="application/json",
+            )
+
+        if not isinstance(survey, dict):
+            return https_fn.Response(
+                json.dumps({"error": "Missing or invalid 'survey' object"}),
+                status=400,
+                mimetype="application/json",
+            )
+
+        db = _get_db()
+        doc_ref = db.collection("waitlist").document(email)
+        doc_ref.set(
+            {
+                "survey": survey,
+                "survey_submitted_at": firestore.SERVER_TIMESTAMP,
+            },
+            merge=True,
+        )
+
+        return https_fn.Response(
+            json.dumps({"message": "Survey saved"}),
+            status=200,
+            mimetype="application/json",
+        )
     except Exception as e:
         print(f"Error: {e}")
         return https_fn.Response(

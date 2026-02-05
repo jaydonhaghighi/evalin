@@ -105,8 +105,8 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
       </div>
 
       {/* Pillars */}
-      <section className="container mx-auto px-4 pt-16 pb-16 bg-slate-100/90">
-        <div className="max-w-5xl mx-auto text-center">
+      <section className="w-full bg-slate-100/90">
+        <div className="container mx-auto px-4 pt-16 pb-16 text-center">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">{config.pillars.title}</h2>
           {config.pillars.subtitle && (
             <p className="mt-2 text-xs md:text-sm text-[#666666]">{config.pillars.subtitle}</p>
