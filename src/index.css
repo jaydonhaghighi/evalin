@@ -39,30 +39,32 @@
     --radius: 0.625rem;
 
     /* Rating tier colors */
-    --rating-scale: 160 84% 39%;
-    --rating-scale-bg: 160 84% 95%;
-    --rating-defend: 45 93% 47%;
-    --rating-defend-bg: 45 93% 95%;
-    --rating-test: 25 95% 53%;
-    --rating-test-bg: 25 95% 95%;
-    --rating-retire: 0 84% 60%;
-    --rating-retire-bg: 0 84% 95%;
+    /* On-brand palette (logo: red/green/blue) — brighter, less “grim” */
+    --rating-scale: 165 70% 34%; /* brand green */
+    --rating-scale-bg: 165 60% 96%;
+    --rating-defend: 222 85% 60%; /* brand blue */
+    --rating-defend-bg: 222 80% 97%;
+    --rating-test: 190 75% 42%; /* brand cyan (between blue/green) */
+    --rating-test-bg: 190 70% 96%;
+    --rating-retire: 0 82% 60%; /* brand red */
+    --rating-retire-bg: 0 78% 97%;
 
     /* Score gauge gradient */
-    --gauge-low: 0 84% 60%;
-    --gauge-mid: 45 93% 47%;
-    --gauge-high: 160 84% 39%;
+    /* NSR: red (worse) → green (avg) → blue (best) */
+    --gauge-low: 0 82% 60%;
+    --gauge-mid: 165 70% 34%;
+    --gauge-high: 222 85% 60%;
 
     /* Pillar colors */
-    --pillar-dv: 217 91% 60%;
-    --pillar-ro: 280 68% 60%;
-    --pillar-ue: 160 84% 39%;
-    --pillar-lp: 25 95% 53%;
+    --pillar-dv: 222 85% 60%; /* blue */
+    --pillar-ro: 0 82% 60%; /* red */
+    --pillar-ue: 165 70% 34%; /* green */
+    --pillar-lp: 190 75% 42%; /* cyan */
 
     /* Confidence indicator */
-    --confidence-high: 160 84% 39%;
-    --confidence-medium: 45 93% 47%;
-    --confidence-low: 0 84% 60%;
+    --confidence-high: 165 70% 34%;
+    --confidence-medium: 190 75% 42%;
+    --confidence-low: 0 82% 60%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -103,10 +105,10 @@
     --input: 217 33% 17%;
     --ring: 212 27% 84%;
 
-    --rating-scale-bg: 160 84% 15%;
-    --rating-defend-bg: 45 93% 15%;
-    --rating-test-bg: 25 95% 15%;
-    --rating-retire-bg: 0 84% 15%;
+    --rating-scale-bg: 165 55% 15%;
+    --rating-defend-bg: 222 75% 15%;
+    --rating-test-bg: 190 65% 15%;
+    --rating-retire-bg: 6 80% 15%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;

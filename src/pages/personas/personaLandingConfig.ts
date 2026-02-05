@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { BarChart3, DollarSign, Target, TrendingUp } from "lucide-react";
+import { Activity, DollarSign, Shield, TrendingUp } from "lucide-react";
 
 export type PillarCardConfig = {
   icon: LucideIcon;
@@ -48,12 +48,12 @@ const INTEGRATION_CARDS_DEFAULT: PillarCardConfig[] = [
     description: "Automated calculation of margins, landed cost including tariffs, and return risk.",
   },
   {
-    icon: Target,
+    icon: Shield,
     title: "Red Ocean Pressure",
     description: "Competition and advertising intensity within a specific product category.",
   },
   {
-    icon: BarChart3,
+    icon: Activity,
     title: "Live Performance",
     description:
       "Real-world data from your store, including sales, conversion rates, repeat purchases, and discounting.",
@@ -152,7 +152,7 @@ export const personaLandingConfigs: Record<"general" | "startup" | "productManag
         cards: [
           INTEGRATION_CARDS_DEFAULT[0],
           {
-            icon: Target,
+            icon: Shield,
             title: "Red Ocean Pressure",
             description: "Competition and advertising intensity in your category.",
           },
@@ -210,12 +210,12 @@ export const personaLandingConfigs: Record<"general" | "startup" | "productManag
             description: "Profit remaining after product costs, shipping, tariffs, and potential returns.",
           },
           {
-            icon: Target,
+            icon: Shield,
             title: "Red Ocean Pressure",
             description: "Market crowding and the intensity of competition.",
           },
           {
-            icon: BarChart3,
+            icon: Activity,
             title: "Live Performance",
             description:
               "Post-launch behavior including sales, conversion rates, repeat purchases, and discounting.",

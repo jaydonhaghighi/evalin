@@ -31,16 +31,16 @@ export function ScoreGauge({ score, size = 'md', showLabel = true, animate = tru
 
   // Calculate color based on score
   const getScoreColor = () => {
-    if (score >= 750) return 'text-rating-scale';
-    if (score >= 600) return 'text-rating-defend';
-    if (score >= 450) return 'text-rating-test';
+    // red (worse) → green (avg) → blue (best)
+    if (score >= 750) return 'text-rating-defend';
+    if (score >= 600) return 'text-rating-scale';
     return 'text-rating-retire';
   };
 
   const getStrokeColor = () => {
-    if (score >= 750) return 'stroke-rating-scale';
-    if (score >= 600) return 'stroke-rating-defend';
-    if (score >= 450) return 'stroke-rating-test';
+    // red (worse) → green (avg) → blue (best)
+    if (score >= 750) return 'stroke-rating-defend';
+    if (score >= 600) return 'stroke-rating-scale';
     return 'stroke-rating-retire';
   };
 
@@ -59,7 +59,7 @@ export function ScoreGauge({ score, size = 'md', showLabel = true, animate = tru
           fill="none"
           stroke="currentColor"
           strokeWidth="8"
-          className="text-muted"
+          className="text-muted opacity-25"
         />
         {/* Progress circle */}
         <circle
@@ -69,7 +69,10 @@ export function ScoreGauge({ score, size = 'md', showLabel = true, animate = tru
           fill="none"
           strokeWidth="8"
           strokeLinecap="round"
-          className={cn(getStrokeColor(), animate && 'transition-all duration-1000 ease-out')}
+          className={cn(
+            getStrokeColor(),
+            animate && 'transition-all duration-1000 ease-out',
+          )}
           style={{
             strokeDasharray: circumference,
             strokeDashoffset: animate ? strokeDashoffset : circumference,
@@ -77,7 +80,7 @@ export function ScoreGauge({ score, size = 'md', showLabel = true, animate = tru
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className={cn('font-bold font-mono', textSizes[size], getScoreColor())}>
+        <span className={cn('font-semibold font-mono', textSizes[size], getScoreColor())}>
           {score}
         </span>
         {showLabel && (
