@@ -7,6 +7,8 @@ interface PillarCardProps {
   pillar: PillarType;
   score: number | null;
   compact?: boolean;
+  iconBackground?: boolean;
+  showDescription?: boolean;
 }
 
 const PILLAR_CONFIG: Record<PillarType, {
@@ -51,7 +53,13 @@ const PILLAR_CONFIG: Record<PillarType, {
   },
 };
 
-export function PillarCard({ pillar, score, compact = false }: PillarCardProps) {
+export function PillarCard({
+  pillar,
+  score,
+  compact = false,
+  iconBackground = true,
+  showDescription = true,
+}: PillarCardProps) {
   const config = PILLAR_CONFIG[pillar];
   const Icon = config.icon;
   const percentage = score !== null ? ((score - 300) / 600) * 100 : 0;
@@ -79,15 +87,20 @@ export function PillarCard({ pillar, score, compact = false }: PillarCardProps) 
     )}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className={cn('p-2 rounded-lg', config.bgClass)}>
+          <div className={cn('p-2 rounded-lg', iconBackground && config.bgClass)}>
             <Icon className={cn('w-4 h-4', config.colorClass)} />
           </div>
           <div>
             <h4 className="font-semibold text-sm">{config.fullName}</h4>
-            <p className="text-xs text-muted-foreground">{config.description}</p>
+            {showDescription && <p className="text-xs text-muted-foreground">{config.description}</p>}
           </div>
         </div>
-        <span className={cn('text-2xl font-bold font-mono', isDisabled ? 'text-muted-foreground' : config.colorClass)}>
+        <span
+          className={cn(
+            'text-2xl font-bold font-mono',
+            isDisabled ? 'text-muted-foreground' : config.colorClass,
+          )}
+        >
           {score ?? '—'}
         </span>
       </div>
@@ -100,7 +113,10 @@ export function PillarCard({ pillar, score, compact = false }: PillarCardProps) 
         </div>
         <div className="h-2 bg-muted rounded-full overflow-hidden">
           <div
-            className={cn('h-full rounded-full transition-all duration-700', isDisabled ? 'bg-muted-foreground/30' : config.colorClass.replace('text-', 'bg-'))}
+            className={cn(
+              'h-full rounded-full transition-all duration-700',
+              isDisabled ? 'bg-muted-foreground/30' : config.colorClass.replace('text-', 'bg-'),
+            )}
             style={{ width: `${percentage}%` }}
           />
         </div>

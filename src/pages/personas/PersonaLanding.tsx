@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useWaitlist } from "@/components/WaitlistProvider";
+import { ProductRatingPreview } from "@/components/ProductRatingPreview";
 import type { PersonaLandingConfig } from "./personaLandingConfig";
 import { ArrowRight, Check } from "lucide-react";
 
@@ -160,31 +161,36 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
         </section>
         <section className="container mx-auto px-4 py-16">
           <div className="relative max-w-6xl mx-auto">
-            <div
-              className="relative rounded-xl aspect-video overflow-hidden bg-slate-100"
-              style={{
-                boxShadow:
-                  "0 24px 70px -20px rgba(0, 0, 0, 0.35), 0 12px 30px -12px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <div
-                className="absolute inset-0 rounded-xl overflow-hidden"
-                style={{
-                  maskImage: "radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)",
-                  WebkitMaskImage: "radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)",
-                }}
-              >
-                <img
-                  src="/landing/product-image.png"
-                  alt="Evalin product preview"
-                  className="w-full h-full object-cover"
-                  style={{
-                    maskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
-                    WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 25%, transparent 100%)",
-                  }}
-                />
-              </div>
-            </div>
+            <ProductRatingPreview
+              productName="Portable Espresso Maker"
+              ratingLabel="Scale"
+              phaseLabel="Phase 2 – Mature"
+              coherentRating={784}
+              confidence={0.86}
+              pillars={[
+                {
+                  title: "Demand Velocity",
+                  score: 812,
+                  note: "Strong, sustained external interest",
+                },
+                {
+                  title: "Red Ocean Pressure",
+                  score: 735,
+                  note: "Active competition, but not prohibitive",
+                },
+                {
+                  title: "Unit Economics",
+                  score: 790,
+                  note: "Solid margins after landed costs and returns",
+                },
+                {
+                  title: "Live Performance",
+                  score: 760,
+                  note: "Healthy sales velocity and conversion",
+                },
+              ]}
+              interpretation="Interpretation: This SKU supports additional acquisition spend and channel expansion. Monitor CPC inflation, but economics and demand are currently robust."
+            />
           </div>
         </section>
       </div>

@@ -12,6 +12,17 @@ import { ArrowRight } from "lucide-react";
 
 const SAMPLE_HISTORY: RatingSnapshot[] = [
   {
+    id: "r0",
+    productId: "p1",
+    nsr: 460,
+    confidenceIndex: 0.52,
+    pillarScores: { dv: 610, ro: 610, ue: 560, lp: 575 },
+    pillarZScores: { dv: 0.05, ro: 0.02, ue: -0.08, lp: -0.02 },
+    phase: 2,
+    algoVersion: "v1.8",
+    timestamp: "2025-05-15T00:00:00.000Z",
+  },
+  {
     id: "r1",
     productId: "p1",
     nsr: 612,
@@ -47,7 +58,7 @@ const SAMPLE_HISTORY: RatingSnapshot[] = [
   {
     id: "r4",
     productId: "p1",
-    nsr: 671,
+    nsr: 780,
     confidenceIndex: 0.64,
     pillarScores: { dv: 690, ro: 548, ue: 620, lp: 660 },
     pillarZScores: { dv: 0.2, ro: -0.03, ue: 0.07, lp: 0.16 },
@@ -58,7 +69,7 @@ const SAMPLE_HISTORY: RatingSnapshot[] = [
   {
     id: "r5",
     productId: "p1",
-    nsr: 658,
+    nsr: 740,
     confidenceIndex: 0.62,
     pillarScores: { dv: 682, ro: 535, ue: 615, lp: 650 },
     pillarZScores: { dv: 0.18, ro: -0.06, ue: 0.05, lp: 0.14 },
@@ -109,7 +120,9 @@ export default function HowItWorks() {
                   <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <Badge className="bg-emerald-600 hover:bg-emerald-600 text-white">Mature Live</Badge>
+                        <Badge className="bg-rating-scale/10 text-rating-scale border border-rating-scale/20 hover:bg-rating-scale/10">
+                          Mature Live
+                        </Badge>
                         <span className="text-xs text-slate-500">Category: Health &amp; Wellness</span>
                         <span className="text-xs text-slate-500">Version: v1.8</span>
                       </div>
@@ -133,8 +146,8 @@ export default function HowItWorks() {
                           <div className="flex-1 pl-4 space-y-3">
                             <div>
                               <p className="text-xs text-slate-500">Confidence</p>
-                              <div className="mt-1 h-2 rounded-full bg-slate-100 overflow-hidden">
-                                <div className="h-full bg-emerald-600" style={{ width: "64%" }} />
+                              <div className="mt-1 h-2 rounded-full bg-muted overflow-hidden">
+                                <div className="h-full rounded-full bg-rating-scale transition-all duration-700" style={{ width: "64%" }} />
                               </div>
                               <p className="mt-1 text-xs text-slate-500">0.64</p>
                             </div>
@@ -183,10 +196,10 @@ export default function HowItWorks() {
             </ul>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <PillarCard pillar="dv" score={868} />
-              <PillarCard pillar="ro" score={328} />
-              <PillarCard pillar="ue" score={391} />
-              <PillarCard pillar="lp" score={886} />
+              <PillarCard pillar="dv" score={868} iconBackground={false} showDescription={false} />
+              <PillarCard pillar="ro" score={328} iconBackground={false} showDescription={false} />
+              <PillarCard pillar="ue" score={391} iconBackground={false} showDescription={false} />
+              <PillarCard pillar="lp" score={886} iconBackground={false} showDescription={false} />
             </div>
 
             <p className="mt-4 text-xs text-slate-500 max-w-3xl">
