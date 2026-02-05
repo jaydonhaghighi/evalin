@@ -16,7 +16,7 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
       <Header />
 
       {/* Hero */}
-      <section className="container mx-auto px-4 pt-20 pb-16 md:pt-24 md:pb-16">
+      <section className="container pt-20 pb-16 md:pt-20 md:pb-8">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex justify-center mb-8">
             <span className="inline-flex items-center rounded-full bg-[#F3F4F8] px-5 py-1.5 text-xs font-sans font-medium text-[#505050]">
@@ -65,7 +65,7 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
 
       {/* Integration Logos */}
       <div className="w-full">
-        <section className="container mx-auto px-4 py-16">
+        <section className="container py-8">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-sans font-normal text-[#666666] mb-6 text-center text-sm">
               Works with your existing stack:
@@ -106,7 +106,7 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
 
       {/* Pillars */}
       <section className="w-full bg-slate-100/90">
-        <div className="container mx-auto px-4 pt-16 pb-16 text-center">
+        <div className="container pt-16 pb-16 text-center">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">{config.pillars.title}</h2>
           {config.pillars.subtitle && (
             <p className="mt-2 text-xs md:text-sm text-[#666666]">{config.pillars.subtitle}</p>
@@ -134,7 +134,7 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
 
       {/* Why section */}
       <div className="w-full">
-        <section className="container mx-auto px-4 py-16">
+        <section className="container py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717] text-center mb-8">
               {config.why.title}
@@ -153,13 +153,13 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
 
       {/* Example image */}
       <div className="w-full bg-slate-100/90">
-        <section className="container mx-auto px-4 pt-16 pb-10">
+        <section className="container pt-16 pb-10">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#171717]">{config.example.title}</h2>
             <p className="mt-3 text-xs md:text-sm text-[#666666] max-w-3xl mx-auto">{config.example.description}</p>
           </div>
         </section>
-        <section className="container mx-auto px-4 py-16">
+        <section className="container py-16">
           <div className="relative max-w-6xl mx-auto">
             <ProductRatingPreview
               productName="Portable Espresso Maker"
@@ -196,7 +196,7 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
       </div>
 
       {/* Bottom CTA */}
-      <section className="container mx-auto px-4 pt-20 pb-24 md:pt-24 md:pb-28">
+      <section className="container pt-20 pb-24 md:pt-24 md:pb-28">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-2xl font-bold tracking-tight text-slate-900 mb-4 text-balance">
             {config.bottomCta.title}
