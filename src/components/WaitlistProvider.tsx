@@ -2,6 +2,9 @@ import { createContext, useContext, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 
 type WaitlistContextValue = {
@@ -52,8 +55,59 @@ function buildWaitlistEndpoint(): string | undefined {
     : `https://${region}-${projectId}.cloudfunctions.net/add_to_waitlist`;
 }
 
+function buildWaitlistSurveyEndpoint(waitlistEndpoint?: string): string | undefined {
+  const configuredEndpoint = (import.meta.env.VITE_WAITLIST_SURVEY_FUNCTION_URL as string | undefined)?.trim();
+  if (configuredEndpoint) return configuredEndpoint;
+
+  if (waitlistEndpoint && /\/add_to_waitlist\/?$/.test(waitlistEndpoint)) {
+    return waitlistEndpoint.replace(/\/add_to_waitlist\/?$/, "/submit_waitlist_survey");
+  }
+
+  const projectId = (import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined)?.trim();
+  const region =
+    (import.meta.env.VITE_FIREBASE_FUNCTIONS_REGION as string | undefined)?.trim() || "us-central1";
+
+  const isLocalhost =
+    typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const useEmulators = isLocalhost && String(import.meta.env.VITE_USE_FIREBASE_EMULATORS) === "true";
+
+  if (!projectId) return undefined;
+  return useEmulators
+    ? `http://localhost:5001/${projectId}/${region}/submit_waitlist_survey`
+    : `https://${region}-${projectId}.cloudfunctions.net/submit_waitlist_survey`;
+}
+
+type SurveyCategory =
+  | "new_founder"
+  | "early_startup"
+  | "established_ecom"
+  | "pm_growth"
+  | "other";
+
+type SurveyPrimaryFunction =
+  | "validate_ideas"
+  | "reorder_defend_retire"
+  | "prioritize_roadmap"
+  | "standardize_reviews"
+  | "initial_exploration";
+
+type WaitlistSurveyState = {
+  category: SurveyCategory | null;
+  category_other_text: string;
+  primary_functions: SurveyPrimaryFunction[];
+  optional_requirements: string;
+};
+
+const DEFAULT_SURVEY: WaitlistSurveyState = {
+  category: null,
+  category_other_text: "",
+  primary_functions: [],
+  optional_requirements: "",
+};
+
 export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const endpoint = useMemo(() => buildWaitlistEndpoint(), []);
+  const surveyEndpoint = useMemo(() => buildWaitlistSurveyEndpoint(endpoint), [endpoint]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -61,6 +115,10 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copy, setCopy] = useState(DEFAULT_COPY);
+  const [isSurveyOpen, setIsSurveyOpen] = useState(false);
+  const [survey, setSurvey] = useState<WaitlistSurveyState>(DEFAULT_SURVEY);
+  const [surveyError, setSurveyError] = useState<string | null>(null);
+  const [isSurveySubmitting, setIsSurveySubmitting] = useState(false);
   const [openContext, setOpenContext] = useState<{
     opened_from_path?: string;
     opened_from_query?: string;
@@ -72,6 +130,11 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const closeModal = () => {
     if (isSubmitting) return;
     setIsOpen(false);
+  };
+
+  const closeSurveyModal = () => {
+    if (isSurveySubmitting) return;
+    setIsSurveyOpen(false);
   };
 
   const openWaitlist = (options?: WaitlistOpenOptions) => {
@@ -106,6 +169,9 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     setIsSubmitted(false);
     setIsSubmitting(false);
     setEmail("");
+    setSurvey(DEFAULT_SURVEY);
+    setSurveyError(null);
+    setIsSurveySubmitting(false);
     setIsOpen(true);
   };
 
@@ -155,10 +221,81 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
 
       // Treat duplicates as success (user is effectively “on the list”)
       setIsSubmitted(true);
+      // Close the email modal and open the survey follow-up.
+      setIsOpen(false);
+      setIsSurveyOpen(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to join waitlist.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const togglePrimaryFunction = (key: SurveyPrimaryFunction) => {
+    setSurvey((prev) => {
+      const has = prev.primary_functions.includes(key);
+      return {
+        ...prev,
+        primary_functions: has ? prev.primary_functions.filter((k) => k !== key) : [...prev.primary_functions, key],
+      };
+    });
+  };
+
+  const submitSurvey = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSurveyError(null);
+
+    const trimmedEmail = email.trim().toLowerCase();
+    if (!trimmedEmail || !trimmedEmail.includes("@")) {
+      setSurveyError("Missing email context. Please re-join the waitlist.");
+      return;
+    }
+
+    if (!survey.category) {
+      setSurveyError("Please select a category.");
+      return;
+    }
+
+    if (survey.category === "other" && !survey.category_other_text.trim()) {
+      setSurveyError('Please specify the "Other" category.');
+      return;
+    }
+
+    if (survey.primary_functions.length === 0) {
+      setSurveyError("Please select at least one primary function.");
+      return;
+    }
+
+    if (!surveyEndpoint) {
+      setSurveyError(
+        "Survey endpoint is not configured. Set VITE_WAITLIST_SURVEY_FUNCTION_URL in your .env and restart the dev server."
+      );
+      return;
+    }
+
+    setIsSurveySubmitting(true);
+    try {
+      const res = await fetch(surveyEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          survey: {
+            ...survey,
+            category_other_text:
+              survey.category === "other" ? survey.category_other_text.trim() : "",
+          },
+        }),
+      });
+
+      const data = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
+      if (!res.ok) throw new Error(data.error || "Failed to submit survey.");
+
+      setIsSurveyOpen(false);
+    } catch (err) {
+      setSurveyError(err instanceof Error ? err.message : "Failed to submit survey.");
+    } finally {
+      setIsSurveySubmitting(false);
     }
   };
 
@@ -220,6 +357,118 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       )}
+
+      {/* Survey Modal (after waitlist signup) */}
+      <Dialog open={isSurveyOpen} onOpenChange={(open) => (open ? setIsSurveyOpen(true) : closeSurveyModal())}>
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-[calc(100vw-1.5rem)] sm:max-w-2xl h-[calc(100vh-1.5rem)] sm:h-auto p-0 overflow-hidden">
+          <div className="p-6 sm:p-8 max-h-[calc(100vh-1.5rem)] sm:max-h-none overflow-y-auto">
+            <DialogHeader className="space-y-3 text-left">
+              <DialogTitle className="text-3xl font-semibold tracking-tight text-slate-900">
+                Align Evalin with your objectives
+              </DialogTitle>
+              <DialogDescription className="text-sm text-slate-600 max-w-xl">
+                Three questions to categorize requirements for the beta program. Completion time is approximately 20 seconds.
+              </DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={submitSurvey} className="mt-8 space-y-8">
+              <div className="space-y-4">
+                <p className="text-sm font-medium text-slate-800">
+                  Which category best describes the current operation?
+                </p>
+
+                <div className="space-y-3">
+                  {[
+                    { key: "new_founder", label: "New founder selecting a first product or category" },
+                    { key: "early_startup", label: "Early-stage startup with live products" },
+                    { key: "established_ecom", label: "Established e-commerce brand or marketplace" },
+                    { key: "pm_growth", label: "Product manager or growth lead at a product-led company" },
+                    { key: "other", label: "Other" },
+                  ].map((opt) => {
+                    const checked = survey.category === (opt.key as SurveyCategory);
+                    return (
+                      <div key={opt.key} className="flex items-start gap-3">
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={() =>
+                            setSurvey((prev) => ({
+                              ...prev,
+                              category: opt.key as SurveyCategory,
+                            }))
+                          }
+                          aria-label={opt.label}
+                        />
+                        <div className="flex-1">
+                          <p className="text-sm text-slate-600">{opt.label}</p>
+                          {opt.key === "other" && checked && (
+                            <Input
+                              value={survey.category_other_text}
+                              onChange={(e) =>
+                                setSurvey((prev) => ({ ...prev, category_other_text: e.target.value }))
+                              }
+                              className="mt-3 max-w-sm"
+                              placeholder=""
+                            />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="border-t border-slate-200/70 pt-8 space-y-4">
+                <p className="text-sm font-medium text-slate-800">Select the primary functions required from Evalin:</p>
+                <div className="space-y-3">
+                  {[
+                    { key: "validate_ideas", label: "Validating new product ideas for launch" },
+                    { key: "reorder_defend_retire", label: "Deciding which items to reorder, defend, or retire" },
+                    { key: "prioritize_roadmap", label: "Prioritizing features or roadmap initiatives" },
+                    { key: "standardize_reviews", label: "Standardizing portfolio reviews with objective data" },
+                    { key: "initial_exploration", label: "Initial exploration" },
+                  ].map((opt) => {
+                    const checked = survey.primary_functions.includes(opt.key as SurveyPrimaryFunction);
+                    return (
+                      <div key={opt.key} className="flex items-start gap-3">
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={() => togglePrimaryFunction(opt.key as SurveyPrimaryFunction)}
+                          aria-label={opt.label}
+                        />
+                        <p className="text-sm text-slate-600">{opt.label}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="border-t border-slate-200/70 pt-8 space-y-3">
+                <p className="text-sm font-medium text-slate-800">Optional Requirements</p>
+                <p className="text-sm text-slate-600">Specify any additional feature requirements (Optional):</p>
+                <Textarea
+                  value={survey.optional_requirements}
+                  onChange={(e) => setSurvey((prev) => ({ ...prev, optional_requirements: e.target.value }))}
+                  placeholder='Example: Side-by-side idea comparison, SKU rationalization, or specific dashboard integrations."'
+                  className="min-h-[88px]"
+                />
+              </div>
+
+              {surveyError && <p className="text-sm text-red-600">{surveyError}</p>}
+
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-slate-900 hover:bg-slate-900/90 text-white"
+                  disabled={isSurveySubmitting}
+                >
+                  {isSurveySubmitting ? "Submitting..." : "Submit Answers"}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
     </WaitlistContext.Provider>
   );
 }
