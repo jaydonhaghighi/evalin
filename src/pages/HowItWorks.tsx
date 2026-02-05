@@ -89,7 +89,7 @@ export default function HowItWorks() {
       <Header />
 
       <main className="container py-12 md:py-16">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl">
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">
             How Evalin works
           </h1>

@@ -49,13 +49,13 @@ export function Header() {
 
   return (
     <header className="border-b bg-slate-100/95 backdrop-blur-sm sticky top-0 z-50 w-full">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="container h-16 flex items-center justify-between">
         <Link to={personaHome} className="flex items-center gap-2">
-            <img
-              src="/landing/evalin_logo.png"
-              alt="Evalin"
-              className="h-48 w-auto object-contain"
-            />
+          <img
+            src="/landing/evalin_logo.png"
+            alt="Evalin"
+            className="h-7 sm:h-7 md:h-7 w-auto object-contain"
+          />
         </Link>
 
         <div className="flex items-center gap-3">
