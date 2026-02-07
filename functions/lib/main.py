@@ -1,6 +1,7 @@
 # main.py
 import json
 import os
+from typing import Any
 from dotenv import load_dotenv
 from firebase_functions import https_fn, options
 from firebase_admin import initialize_app, firestore
@@ -10,15 +11,46 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
 _db: firestore.Client | None = None
 
-_CORS = options.CorsOptions(
-    cors_origins=[
-        r"http://localhost:5173",
-        r"http://localhost:8080",
-        r"https://evalin.io",
-        r"https://www.evalin.io",
-    ],
-    cors_methods=["POST", "OPTIONS"],
-)
+_ALLOWED_CORS_ORIGINS = {
+    "http://localhost:5173",
+    "http://localhost:8080",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:8080",
+    "https://evalin.io",
+    "https://www.evalin.io",
+}
+
+
+def _cors_headers(req: https_fn.Request) -> dict[str, str]:
+    """
+    Ensure preflight (OPTIONS) and normal responses include CORS headers.
+    Some runtimes won't add CORS headers to early-return OPTIONS responses.
+    """
+    origin = (req.headers.get("Origin") or "").strip()
+    if origin not in _ALLOWED_CORS_ORIGINS:
+        return {}
+
+    requested_headers = (req.headers.get("Access-Control-Request-Headers") or "Content-Type").strip()
+    return {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": requested_headers,
+        "Access-Control-Max-Age": "3600",
+        "Vary": "Origin",
+    }
+
+
+def _options_response(req: https_fn.Request) -> https_fn.Response:
+    return https_fn.Response("", status=204, headers=_cors_headers(req))
+
+
+def _json_response(req: https_fn.Request, payload: Any, *, status: int) -> https_fn.Response:
+    return https_fn.Response(
+        json.dumps(payload),
+        status=status,
+        mimetype="application/json",
+        headers=_cors_headers(req),
+    )
 
 
 def _get_db() -> firestore.Client:
@@ -37,84 +69,58 @@ def _get_db() -> firestore.Client:
     memory=256,
     timeout_sec=60,
     invoker="public",
-
-    # CORS configuration
-    cors=_CORS
 )
 def add_to_waitlist(req: https_fn.Request) -> https_fn.Response:
     if req.method == "OPTIONS":
-        return https_fn.Response("", status=204)
+        return _options_response(req)
 
     if req.method != "POST":
-        return https_fn.Response(
-            json.dumps({"error": "Method not allowed"}),
-            status=405,
-            mimetype="application/json"        
-        )
+        return _json_response(req, {"error": "Method not allowed"}, status=405)
 
     try:
-        data = req.get_json(silent=True)
-        if not data or "email" not in data:
-            return https_fn.Response(
-                json.dumps({"error": "Missing 'email' in JSON body"}),
-                status=400,
-                mimetype="application/json"
-            )
+        data = req.get_json(silent=True) or {}
+        if not isinstance(data, dict):
+            return _json_response(req, {"error": "Invalid JSON body"}, status=400)
 
-        email = data["email"]
-        meta = data.get("meta") if isinstance(data, dict) else None
+        email = (data.get("email") or "").strip().lower()
+        if not email:
+            return _json_response(req, {"error": "Missing 'email' in JSON body"}, status=400)
+
+        meta = data.get("meta")
         result, status_code = process_waitlist_signup(_get_db(), email, meta)
 
-        return https_fn.Response(
-            json.dumps(result),
-            status=status_code,
-            mimetype="application/json",
-        )
+        return _json_response(req, result, status=status_code)
 
     except Exception as e:
         print(f"Error: {e}")
-        return https_fn.Response(
-            json.dumps({"error": "Internal server error"}),
-            status=500,
-            mimetype="application/json",
-        )
+        return _json_response(req, {"error": "Internal server error"}, status=500)
 
 
 @https_fn.on_request(
     memory=256,
     timeout_sec=60,
     invoker="public",
-    cors=_CORS,
 )
 def submit_waitlist_survey(req: https_fn.Request) -> https_fn.Response:
     if req.method == "OPTIONS":
-        return https_fn.Response("", status=204)
+        return _options_response(req)
 
     if req.method != "POST":
-        return https_fn.Response(
-            json.dumps({"error": "Method not allowed"}),
-            status=405,
-            mimetype="application/json",
-        )
+        return _json_response(req, {"error": "Method not allowed"}, status=405)
 
     try:
         data = req.get_json(silent=True) or {}
+        if not isinstance(data, dict):
+            return _json_response(req, {"error": "Invalid JSON body"}, status=400)
+
         email = (data.get("email") or "").strip().lower()
         survey = data.get("survey")
 
         if not email or "@" not in email:
-            return https_fn.Response(
-                json.dumps({"error": "Valid 'email' is required"}),
-                status=400,
-                mimetype="application/json",
-            )
+            return _json_response(req, {"error": "Valid 'email' is required"}, status=400)
 
         if not isinstance(survey, dict):
-            return https_fn.Response(
-                json.dumps({"error": "Missing or invalid 'survey' object"}),
-                status=400,
-                mimetype="application/json",
-            )
+            return _json_response(req, {"error": "Missing or invalid 'survey' object"}, status=400)
 
         db = _get_db()
         doc_ref = db.collection("waitlist").document(email)
@@ -126,15 +132,7 @@ def submit_waitlist_survey(req: https_fn.Request) -> https_fn.Response:
             merge=True,
         )
 
-        return https_fn.Response(
-            json.dumps({"message": "Survey saved"}),
-            status=200,
-            mimetype="application/json",
-        )
+        return _json_response(req, {"message": "Survey saved"}, status=200)
     except Exception as e:
         print(f"Error: {e}")
-        return https_fn.Response(
-            json.dumps({"error": "Internal server error"}),
-            status=500,
-            mimetype="application/json",
-        )
+        return _json_response(req, {"error": "Internal server error"}, status=500)
