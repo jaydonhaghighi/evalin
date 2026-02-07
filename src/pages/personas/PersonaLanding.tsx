@@ -10,6 +10,10 @@ import { ArrowRight, Check } from "lucide-react";
 
 export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
   const { openWaitlist } = useWaitlist();
+  const logoWrapClass = "flex items-start justify-center h-7 md:h-8 w-32 md:w-36";
+  const logoImgClass =
+    "h-full w-full object-contain object-top opacity-95 contrast-125 filter";
+  const amazonLogoImgClass = `${logoImgClass} scale-90 origin-top translate-y-[4px] md:translate-y-[5px]`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -65,38 +69,38 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
 
       {/* Integration Logos */}
       <div className="w-full">
-        <section className="container py-8">
+        <section className="container pt-8 pb-16">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-sans font-normal text-[#666666] mb-6 text-center text-sm">
               Works with your existing stack:
             </h2>
-            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-              <div className="flex items-center justify-center h-14">
+            <div className="flex flex-wrap items-start justify-center gap-5 md:gap-8">
+              <div className={logoWrapClass}>
                 <img
-                  src="/landing/shopify-logo.svg"
+                  src="/landing/shopify-logo.png"
                   alt="Shopify"
-                  className="h-9 md:h-10 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
+                  className={logoImgClass}
                 />
               </div>
-              <div className="flex items-center justify-center h-14">
+              <div className={logoWrapClass}>
                 <img
-                  src="/landing/stripe-logo.svg"
+                  src="/landing/stripe-logo.png"
                   alt="Stripe"
-                  className="h-9 md:h-10 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
+                  className={logoImgClass}
                 />
               </div>
-              <div className="flex items-center justify-center h-14">
+              <div className={logoWrapClass}>
                 <img
-                  src="/landing/amazon-logo.svg"
+                  src="/landing/amazon-logo.png"
                   alt="Amazon"
-                  className="h-9 md:h-10 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
+                  className={amazonLogoImgClass}
                 />
               </div>
-              <div className="flex items-center justify-center h-14">
+              <div className={logoWrapClass}>
                 <img
-                  src="/landing/google-analytics-logo.svg"
+                  src="/landing/google-analytics-logo.png"
                   alt="Google Analytics"
-                  className="h-7 md:h-8 w-auto opacity-95 contrast-125 transition-all duration-200 ease-out filter hover:brightness-90"
+                  className={logoImgClass}
                 />
               </div>
             </div>
@@ -118,7 +122,7 @@ export function PersonaLanding({ config }: { config: PersonaLandingConfig }) {
               return (
                 <div
                   key={card.title}
-                  className="rounded-xl border border-slate-200/70 bg-[#F3F4F8]/60 p-6"
+                  className="rounded-xl border border-slate-200/70 bg-[#fafafa]/80 p-6"
                 >
                   <Icon className="h-5 w-5 text-slate-400" />
                   <h3 className="mt-4 text-sm font-medium text-[#171717]">{card.title}</h3>
