@@ -114,6 +114,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [wasDuplicate, setWasDuplicate] = useState(false);
   const [copy, setCopy] = useState(DEFAULT_COPY);
   const [isSurveyOpen, setIsSurveyOpen] = useState(false);
   const [survey, setSurvey] = useState<WaitlistSurveyState>(DEFAULT_SURVEY);
@@ -167,6 +168,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
 
     setError(null);
     setIsSubmitted(false);
+    setWasDuplicate(false);
     setIsSubmitting(false);
     setEmail("");
     setSurvey(DEFAULT_SURVEY);
@@ -219,9 +221,17 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         throw new Error(data.error || "Failed to join waitlist.");
       }
 
-      // Treat duplicates as success (user is effectively “on the list”)
       setIsSubmitted(true);
-      // Close the email modal and open the survey follow-up.
+
+      if (data.duplicate) {
+        // Already on the waitlist: show a friendly message and don't force the survey again.
+        setWasDuplicate(true);
+        setIsSurveyOpen(false);
+        return;
+      }
+
+      setWasDuplicate(false);
+      // New signup: close the email modal and open the survey follow-up.
       setIsOpen(false);
       setIsSurveyOpen(true);
     } catch (err) {
@@ -350,8 +360,12 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">{copy.successTitle}</h2>
-                <p className="text-slate-600">{copy.successDescription}</p>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                  {wasDuplicate ? "You're already on the waitlist" : copy.successTitle}
+                </h2>
+                <p className="text-slate-600">
+                  {wasDuplicate ? "Looks like you're already on the list. We'll be in touch soon." : copy.successDescription}
+                </p>
               </div>
             )}
           </div>

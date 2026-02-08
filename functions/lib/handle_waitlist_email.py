@@ -4,6 +4,7 @@ import ssl
 from datetime import datetime
 from email.message import EmailMessage
 from typing import Any, Iterable, Optional
+from urllib.parse import urljoin
 
 import google.cloud.firestore
 from firebase_admin import firestore
@@ -23,16 +24,179 @@ def _parse_recipients(raw: Optional[str]) -> list[str]:
     return [e.strip() for e in raw.split(",") if e.strip()]
 
 
-def _build_msg(*, subject: str, from_addr: str, to_addrs: Iterable[str], body: str) -> EmailMessage:
+def _build_msg(
+    *,
+    subject: str,
+    from_addr: str,
+    to_addrs: Iterable[str],
+    body_text: str,
+    body_html: Optional[str] = None,
+) -> EmailMessage:
     msg = EmailMessage()
     msg["From"] = from_addr
     msg["To"] = ", ".join(list(to_addrs))
     msg["Subject"] = subject
-    msg.set_content(body)
+    msg.set_content(body_text)
+    if body_html:
+        msg.add_alternative(body_html, subtype="html")
     return msg
 
 
-def send_waitlist_emails(user_email: str) -> dict:
+def _safe_str(v: Any) -> str:
+    if v is None:
+        return ""
+    if isinstance(v, str):
+        return v
+    try:
+        return str(v)
+    except Exception:
+        return ""
+
+
+def _format_attribution(meta: Optional[dict[str, Any]]) -> str:
+    if not isinstance(meta, dict) or not meta:
+        return ""
+
+    landing_path = _safe_str(meta.get("landing_path")).strip()
+    landing_query = _safe_str(meta.get("landing_query")).strip()
+    referrer = _safe_str(meta.get("referrer")).strip()
+    user_agent = _safe_str(meta.get("user_agent")).strip()
+    utm = meta.get("utm") if isinstance(meta.get("utm"), dict) else None
+    click_ids = meta.get("click_ids") if isinstance(meta.get("click_ids"), dict) else None
+
+    lines: list[str] = []
+
+    # Best-effort landing URL (if you ever serve multiple domains, adjust this).
+    if landing_path:
+        base = os.environ.get("PUBLIC_BASE_URL", "https://evalin.io").strip() or "https://evalin.io"
+        landing = urljoin(base.rstrip("/") + "/", landing_path.lstrip("/"))
+        if landing_query:
+            landing = f"{landing}{landing_query}"
+        lines.append(f"Landing: {landing}")
+    elif landing_query:
+        lines.append(f"Landing query: {landing_query}")
+
+    if referrer:
+        lines.append(f"Referrer: {referrer}")
+
+    if isinstance(utm, dict) and utm:
+        utm_keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]
+        parts = []
+        for k in utm_keys:
+            v = _safe_str(utm.get(k)).strip()
+            if v:
+                parts.append(f"{k}={v}")
+        if parts:
+            lines.append("UTM: " + ", ".join(parts))
+
+    if isinstance(click_ids, dict) and click_ids:
+        parts = []
+        for k, v in click_ids.items():
+            sv = _safe_str(v).strip()
+            if sv:
+                parts.append(f"{k}={sv}")
+        if parts:
+            lines.append("Click IDs: " + ", ".join(parts))
+
+    if user_agent:
+        lines.append(f"User agent: {user_agent}")
+
+    if not lines:
+        return ""
+
+    return "\n".join(["", "Attribution", "-----------", *lines])
+
+
+def _build_confirmation_html(*, to_email: str) -> str:
+    # NOTE: use a publicly reachable logo URL (CID embedding can be added later if needed).
+    base = (os.environ.get("PUBLIC_BASE_URL") or "https://evalin.io").strip() or "https://evalin.io"
+    logo_url = urljoin(base.rstrip("/") + "/", "landing/evalin_logo.png")
+    how_it_works_url = urljoin(base.rstrip("/") + "/", "how-it-works")
+
+    # Simple, broadly compatible HTML email (table layout, inline-ish styles).
+    return f"""\
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <title>Thanks for joining Evalin</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#F8FAFC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#0F172A;">
+    <!-- Preheader -->
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
+      You're on the Evalin waitlist. We'll reach out soon with early access.
+    </div>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8FAFC;padding:24px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
+            <tr>
+              <td style="padding:8px 8px 16px 8px;">
+                <img src="{logo_url}" alt="Evalin" height="28" style="display:block;height:28px;width:auto;" />
+              </td>
+            </tr>
+
+            <tr>
+              <td style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:24px;">
+                <h1 style="margin:0 0 8px 0;font-size:22px;line-height:1.25;letter-spacing:-0.01em;">
+                  Thanks for joining the waitlist
+                </h1>
+                <p style="margin:0 0 16px 0;font-size:14px;line-height:1.6;color:#334155;">
+                  You're in. We'll reach out soon with early access to Evalin.
+                </p>
+
+                <div style="background:#F1F5F9;border:1px solid #E2E8F0;border-radius:12px;padding:12px 14px;margin:0 0 16px 0;">
+                  <p style="margin:0;font-size:13px;line-height:1.5;color:#0F172A;">
+                    <strong>Email on file:</strong> {to_email}
+                  </p>
+                </div>
+
+                <h2 style="margin:0 0 8px 0;font-size:14px;line-height:1.4;color:#0F172A;">
+                  What happens next
+                </h2>
+                <ul style="margin:0 0 16px 18px;padding:0;color:#334155;font-size:14px;line-height:1.6;">
+                  <li>We’ll invite you to early access as soon as it opens for you.</li>
+                  <li>You’ll get product updates and short prompts to help us tailor Evalin to your workflow.</li>
+                  <li>If you reply with your store/category, we’ll prioritize relevant features.</li>
+                </ul>
+
+                <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 8px 0;">
+                  <tr>
+                    <td>
+                      <a href="{how_it_works_url}"
+                         style="display:inline-block;background:#111827;color:#FFFFFF;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;">
+                        See how it works
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin:16px 0 0 0;font-size:12px;line-height:1.6;color:#64748B;">
+                  If you didn’t request this, you can ignore this email.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:14px 8px 0 8px;">
+                <p style="margin:0;font-size:12px;line-height:1.6;color:#94A3B8;">
+                  © {datetime.utcnow().year} Evalin
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+"""
+
+
+def send_waitlist_emails(user_email: str, meta: Optional[dict[str, Any]] = None) -> dict:
     """
     Very simple SMTP sender.
 
@@ -76,6 +240,7 @@ def send_waitlist_emails(user_email: str) -> dict:
     messages: list[EmailMessage] = []
 
     if notify_to:
+        attribution_block = _format_attribution(meta)
         internal_body = "\n".join(
             [
                 "New waitlist signup!",
@@ -83,13 +248,31 @@ def send_waitlist_emails(user_email: str) -> dict:
                 f"Email: {user_email}",
                 f"Timestamp: {datetime.utcnow().isoformat()} UTC",
             ]
-        )
+        ) + attribution_block
+
+        subject_suffix = ""
+        try:
+            if isinstance(meta, dict):
+                lp = _safe_str(meta.get("landing_path")).strip()
+                campaign = ""
+                utm = meta.get("utm") if isinstance(meta.get("utm"), dict) else None
+                if isinstance(utm, dict):
+                    campaign = _safe_str(utm.get("utm_campaign")).strip()
+                if lp and campaign:
+                    subject_suffix = f" ({lp} · {campaign})"
+                elif lp:
+                    subject_suffix = f" ({lp})"
+                elif campaign:
+                    subject_suffix = f" ({campaign})"
+        except Exception:
+            subject_suffix = ""
+
         messages.append(
             _build_msg(
-                subject="New Evalin Waitlist Signup",
+                subject=f"New Evalin Waitlist Signup{subject_suffix}",
                 from_addr=smtp_from,
                 to_addrs=notify_to,
-                body=internal_body,
+                body_text=internal_body,
             )
         )
 
@@ -113,12 +296,15 @@ def send_waitlist_emails(user_email: str) -> dict:
                 "The Evalin Team",
             ]
         )
+
+        external_html = _build_confirmation_html(to_email=user_email)
         messages.append(
             _build_msg(
                 subject="Thanks for Joining Evalin",
                 from_addr=smtp_from,
                 to_addrs=[user_email],
-                body=external_body,
+                body_text=external_body,
+                body_html=external_html,
             )
         )
 
@@ -185,7 +371,7 @@ def process_waitlist_signup(
         return {"message": "Email already on waitlist", "duplicate": True}, 200
 
     # Send notification (best-effort)
-    smtp_status = send_waitlist_emails(email)
+    smtp_status = send_waitlist_emails(email, meta)
 
     return {
         "message": "Successfully added to waitlist",

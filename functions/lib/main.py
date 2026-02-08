@@ -3,13 +3,24 @@ import json
 import os
 from typing import Any
 from dotenv import load_dotenv
-from firebase_functions import https_fn, options
+from firebase_functions import https_fn
+from firebase_functions.params import SecretParam
 from firebase_admin import initialize_app, firestore
 from handle_waitlist_email import process_waitlist_signup
 
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
+_DOTENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
+if os.path.exists(_DOTENV_PATH):
+    # Only load local dev env if the file exists.
+    # (Avoid parsing unrelated .env files during deploy analysis.)
+    load_dotenv(dotenv_path=_DOTENV_PATH)
 
 _db: firestore.Client | None = None
+
+# Secrets (Google Secret Manager) bound to functions at deploy-time.
+# These names must be UPPER_SNAKE_CASE.
+SMTP_USER = SecretParam("SMTP_USER")
+SMTP_PASSWORD = SecretParam("SMTP_PASSWORD")
+SMTP_NOTIFY_TO = SecretParam("SMTP_NOTIFY_TO")
 
 _ALLOWED_CORS_ORIGINS = {
     "http://localhost:5173",
@@ -69,6 +80,7 @@ def _get_db() -> firestore.Client:
     memory=256,
     timeout_sec=60,
     invoker="public",
+    secrets=[SMTP_USER, SMTP_PASSWORD, SMTP_NOTIFY_TO],
 )
 def add_to_waitlist(req: https_fn.Request) -> https_fn.Response:
     if req.method == "OPTIONS":
