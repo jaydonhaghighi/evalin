@@ -58,21 +58,23 @@ export function Header() {
           />
         </Link>
 
-        <div className="flex items-center gap-3">
-          <nav className="hidden md:flex items-center gap-3">
-            <Button
-              type="button"
-              size="sm"
-              className="text-xs bg-[#171717] hover:bg-[#171717]/90 text-white"
-              onClick={() => openWaitlist({ title: betaButtonText, submitLabel: betaButtonText })}
-            >
-              {betaButtonText}
-            </Button>
-          </nav>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Button
+            type="button"
+            size="sm"
+            className="min-w-0 bg-[#171717] hover:bg-[#171717]/90 text-white text-[11px] sm:text-xs max-w-[150px] sm:max-w-none truncate"
+            onClick={() => openWaitlist({ title: betaButtonText, submitLabel: betaButtonText })}
+            title={betaButtonText}
+          >
+            {betaButtonText}
+          </Button>
 
-        <Link className="text-xs text-[#171717] hover:text-[#171717]/90" to="/how-it-works">
-          How it works
-        </Link>
+          <Link
+            className="shrink-0 whitespace-nowrap text-[11px] sm:text-xs text-[#171717] hover:text-[#171717]/90"
+            to="/how-it-works"
+          >
+            How it works
+          </Link>
         </div>
       </div>
     </header>
