@@ -37,6 +37,12 @@ jobs:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVALIN }}
           project_id: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
 
+      - name: Setup gcloud
+        if: github.event_name == 'push'
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+
       - name: Setup Python
         if: github.event_name == 'push'
         uses: actions/setup-python@v5
@@ -101,4 +107,15 @@ jobs:
         if: github.event_name == 'push'
         env:
           PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-        run: firebase --project "$PROJECT_ID" deploy --only functions --non-interactive
+        run: |
+          set -euo pipefail
+          # One-time cleanup: remove legacy non-secret env vars that conflict with Secret Manager bindings.
+          # (Cloud Run rejects having both a secret env var and a non-secret env var with the same name.)
+          gcloud run services describe add-to-waitlist --region us-central1 --project "$PROJECT_ID" >/dev/null 2>&1 && \
+            gcloud run services update add-to-waitlist \
+              --region us-central1 \
+              --project "$PROJECT_ID" \
+              --remove-env-vars SMTP_USER,SMTP_PASSWORD,SMTP_NOTIFY_TO \
+              --quiet || true
+
+          firebase --project "$PROJECT_ID" deploy --only functions --non-interactive
