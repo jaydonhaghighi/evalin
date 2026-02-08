@@ -49,7 +49,7 @@ export function Header() {
 
   return (
     <header className="border-b bg-slate-100/95 backdrop-blur-sm sticky top-0 z-50 w-full">
-      <div className="container h-16 flex items-center justify-between">
+      <div className="container h-16 flex items-center justify-between gap-4 sm:gap-6">
         <Link to={personaHome} className="flex items-center gap-2">
           <img
             src="/landing/evalin_logo.png"

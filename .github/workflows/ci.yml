@@ -30,6 +30,12 @@ jobs:
           node-version: "20"
           cache: "npm"
 
+      - name: Setup Python
+        if: github.event_name == 'push'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
       - name: Install dependencies
         run: npm ci
 
@@ -58,3 +64,34 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVALIN }}
           projectId: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
           channelId: live
+
+      - name: Install Firebase CLI
+        if: github.event_name == 'push'
+        run: npm install -g firebase-tools
+
+      - name: Setup Python venv for functions
+        if: github.event_name == 'push'
+        run: |
+          python -m venv "functions/lib/venv"
+          . "functions/lib/venv/bin/activate"
+          python -m pip install --upgrade pip
+          python -m pip install -r "functions/lib/requirements.txt"
+
+      - name: Set Functions secrets (Secret Manager)
+        if: github.event_name == 'push'
+        env:
+          PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_NOTIFY_TO: ${{ secrets.SMTP_NOTIFY_TO }}
+        run: |
+          set -euo pipefail
+          echo "$SMTP_USER" | firebase --project "$PROJECT_ID" functions:secrets:set SMTP_USER --data-file=- --force
+          echo "$SMTP_PASSWORD" | firebase --project "$PROJECT_ID" functions:secrets:set SMTP_PASSWORD --data-file=- --force
+          echo "$SMTP_NOTIFY_TO" | firebase --project "$PROJECT_ID" functions:secrets:set SMTP_NOTIFY_TO --data-file=- --force
+
+      - name: Deploy Functions
+        if: github.event_name == 'push'
+        env:
+          PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+        run: firebase --project "$PROJECT_ID" deploy --only functions
