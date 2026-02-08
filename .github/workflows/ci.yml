@@ -30,6 +30,13 @@ jobs:
           node-version: "20"
           cache: "npm"
 
+      - name: Authenticate to Google Cloud
+        if: github.event_name == 'push'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EVALIN }}
+          project_id: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+
       - name: Setup Python
         if: github.event_name == 'push'
         uses: actions/setup-python@v5
@@ -67,7 +74,7 @@ jobs:
 
       - name: Install Firebase CLI
         if: github.event_name == 'push'
-        run: npm install -g firebase-tools
+        run: npm install -g firebase-tools@latest
 
       - name: Setup Python venv for functions
         if: github.event_name == 'push'
@@ -94,4 +101,4 @@ jobs:
         if: github.event_name == 'push'
         env:
           PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-        run: firebase --project "$PROJECT_ID" deploy --only functions
+        run: firebase --project "$PROJECT_ID" deploy --only functions --non-interactive
