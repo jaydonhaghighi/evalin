@@ -143,9 +143,9 @@ export function ProductRatingPreview({
             </div>
           </div>
 
-          <div className="shrink-0 text-left md:text-right">
-            <div className="inline-flex rounded-2xl border bg-muted/20 p-3 md:p-4 shadow-sm">
-              <div className="flex items-center gap-4">
+          <div className="w-full md:w-auto text-left md:text-right">
+            <div className="w-full max-w-full rounded-2xl border bg-muted/20 p-3 md:p-4 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
                 <div className="relative w-[92px] h-[92px] md:w-[104px] md:h-[104px] shrink-0">
                   <svg
                     className="w-full h-full -rotate-90"
@@ -189,7 +189,7 @@ export function ProductRatingPreview({
                   </div>
                 </div>
 
-                <div className="min-w-[180px] md:min-w-[220px]">
+                <div className="min-w-0 w-full flex-1">
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
                       <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Confidence Index</p>
