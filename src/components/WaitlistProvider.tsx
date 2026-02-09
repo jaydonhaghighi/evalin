@@ -374,8 +374,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
 
       {/* Survey Modal (after waitlist signup) */}
       <Dialog open={isSurveyOpen} onOpenChange={(open) => (open ? setIsSurveyOpen(true) : closeSurveyModal())}>
-        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-[calc(100vw-1.5rem)] sm:max-w-2xl h-[calc(100vh-1.5rem)] sm:h-auto p-0 overflow-hidden">
-          <div className="p-6 sm:p-8 max-h-[calc(100vh-1.5rem)] sm:max-h-none overflow-y-auto">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-[calc(100vw-1.5rem)] sm:max-w-2xl max-h-[calc(100vh-1.5rem)] p-0 overflow-hidden">
+          <div className="p-6 sm:p-8 max-h-[calc(100vh-1.5rem)] overflow-y-auto">
             <DialogHeader className="space-y-3 text-left">
               <DialogTitle className="text-3xl font-semibold tracking-tight text-slate-900">
                 Align Evalin with your objectives
@@ -401,18 +401,43 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
                   ].map((opt) => {
                     const checked = survey.category === (opt.key as SurveyCategory);
                     return (
-                      <div key={opt.key} className="flex items-start gap-3">
-                        <Checkbox
-                          checked={checked}
-                          onCheckedChange={() =>
+                      <div
+                        key={opt.key}
+                        role="button"
+                        tabIndex={0}
+                        className="flex items-start gap-3 rounded-lg p-2 -m-2 cursor-pointer hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+                        onClick={() =>
+                          setSurvey((prev) => ({
+                            ...prev,
+                            category: opt.key as SurveyCategory,
+                          }))
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
                             setSurvey((prev) => ({
                               ...prev,
                               category: opt.key as SurveyCategory,
-                            }))
+                            }));
                           }
-                          aria-label={opt.label}
-                        />
-                        <div className="flex-1">
+                        }}
+                      >
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => e.stopPropagation()}
+                        >
+                          <Checkbox
+                            checked={checked}
+                            onCheckedChange={() =>
+                              setSurvey((prev) => ({
+                                ...prev,
+                                category: opt.key as SurveyCategory,
+                              }))
+                            }
+                            aria-label={opt.label}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm text-slate-600">{opt.label}</p>
                           {opt.key === "other" && checked && (
                             <Input
@@ -443,12 +468,29 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
                   ].map((opt) => {
                     const checked = survey.primary_functions.includes(opt.key as SurveyPrimaryFunction);
                     return (
-                      <div key={opt.key} className="flex items-start gap-3">
-                        <Checkbox
-                          checked={checked}
-                          onCheckedChange={() => togglePrimaryFunction(opt.key as SurveyPrimaryFunction)}
-                          aria-label={opt.label}
-                        />
+                      <div
+                        key={opt.key}
+                        role="button"
+                        tabIndex={0}
+                        className="flex items-start gap-3 rounded-lg p-2 -m-2 cursor-pointer hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+                        onClick={() => togglePrimaryFunction(opt.key as SurveyPrimaryFunction)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            togglePrimaryFunction(opt.key as SurveyPrimaryFunction);
+                          }
+                        }}
+                      >
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => e.stopPropagation()}
+                        >
+                          <Checkbox
+                            checked={checked}
+                            onCheckedChange={() => togglePrimaryFunction(opt.key as SurveyPrimaryFunction)}
+                            aria-label={opt.label}
+                          />
+                        </div>
                         <p className="text-sm text-slate-600">{opt.label}</p>
                       </div>
                     );
