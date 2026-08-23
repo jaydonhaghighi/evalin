@@ -7,6 +7,12 @@ on:
     paths:
       - 'tools/suivo-semantic-mvp/**'
       - '.github/workflows/suivo-semantic-mvp.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'tools/suivo-semantic-mvp/**'
+      - '.github/workflows/suivo-semantic-mvp.yml'
   workflow_dispatch:
 
 permissions:
